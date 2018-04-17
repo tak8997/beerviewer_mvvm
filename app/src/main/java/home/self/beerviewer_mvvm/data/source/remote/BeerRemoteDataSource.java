@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerDataSource;
 import home.self.beerviewer_mvvm.network.BeerApiService;
+import home.self.beerviewer_mvvm.network.BeerViewerClient;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,7 +19,7 @@ import io.reactivex.schedulers.Schedulers;
 public class BeerRemoteDataSource implements BeerDataSource {
 
     public BeerRemoteDataSource() {
-//        this.apiService = apiService;
+        this.apiService = BeerViewerClient.createService(BeerApiService.class);
     }
 
     private final BeerApiService apiService;

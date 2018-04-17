@@ -16,8 +16,8 @@ public class BeerLocalDataSource implements BeerDataSource{
 
     private BeerDao beerDao;
 
-    public BeerLocalDataSource(BeerDao beerDao) {
-        this.beerDao = beerDao;
+    public BeerLocalDataSource() {
+        this.beerDao = BeerDatabase.getInstance().beerDao();
     }
 
     private void sendEventBus() {

@@ -24,13 +24,13 @@ public class SplashActivity extends AppCompatActivity implements SplashNavigator
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySplashBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
-        splashViewModel = new SplashViewModel(this, new BeerRepository(new BeerRemoteDataSource(), new BeerLocalDataSource(BeerDatabase.getInstance().beerDao())));
+        splashViewModel = new SplashViewModel(this, new BeerRepository(new BeerRemoteDataSource(), new BeerLocalDataSource()));
         binding.setViewModel(splashViewModel);
-
-        getBeers();
     }
 
-    private void getBeers() {
+    @Override
+    protected void onResume() {
+        super.onResume();
         splashViewModel.getBeers();
     }
 

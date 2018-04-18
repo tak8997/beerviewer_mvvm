@@ -38,7 +38,6 @@ public class SplashViewModel extends BaseObservable {
                         List<BeerModel> beers = beerModels;
                         Log.d("SplashActivity", "beer_size : " + beers.size() + "");
                         if(beers != null) {
-//                            BeerDatabase.getInstance().addBeers(beers);
                             beerRepository.addBeers(beers);
                             splashView.startBeerViewActivity();
                         } else

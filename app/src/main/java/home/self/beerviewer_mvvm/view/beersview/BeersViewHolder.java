@@ -41,7 +41,7 @@ public class BeersViewHolder extends RecyclerView.ViewHolder {
 
     private BeerModel beer;
 
-    public BeersViewHolder(View itemView) {
+    public BeersViewHolder(View itemView, BeerItemViewModel viewModel) {
         super(itemView);
         ButterKnife.bind(this, itemView);
 

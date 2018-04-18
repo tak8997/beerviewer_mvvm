@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
+import home.self.beerviewer_mvvm.data.source.BeerRepository;
+import home.self.beerviewer_mvvm.data.source.local.BeerLocalDataSource;
+import home.self.beerviewer_mvvm.data.source.remote.BeerRemoteDataSource;
 import home.self.beerviewer_mvvm.databinding.ActivityBeersViewBinding;
 import home.self.beerviewer_mvvm.rxbus.Events;
 import home.self.beerviewer_mvvm.rxbus.RxEventBus;
@@ -40,19 +44,20 @@ public class BeersViewActivity extends AppCompatActivity
     Toolbar toolbar;
 
     private BeersViewModel beersViewModel;
+    private ActivityBeersViewBinding binding;
 
     private BeersAdapter adapter;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public int pageStart = 1;
+    private int pageStart = 1;
     private int perPage = 25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityBeersViewBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_beers_view);
-        beersViewModel = new BeersViewModel();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_beers_view);
+        beersViewModel = new BeersViewModel(new BeerRepository(new BeerRemoteDataSource(), new BeerLocalDataSource()), this);
         binding.setViewModel(beersViewModel);
 
         initView();
@@ -62,18 +67,13 @@ public class BeersViewActivity extends AppCompatActivity
     private void initView() {
         setSupportActionBar(toolbar);
 
-        adapter = new BeersAdapter();
+        adapter = new BeersAdapter(this);
         adapter.setOnBottomReachedListener(this);
-        beerRecycler.setLayoutManager(new LinearLayoutManager(this));
-        beerRecycler.setAdapter(adapter);
+        binding.beerRecyler.setLayoutManager(new LinearLayoutManager(this));
+        binding.beerRecyler.setAdapter(adapter);
 
-        refreshLayout.setOnRefreshListener(this);
-        refreshLayout.setColorSchemeColors(Color.YELLOW, Color.RED, Color.GREEN);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        binding.refreshlayout.setOnRefreshListener(this);
+        binding.refreshlayout.setColorSchemeColors(Color.YELLOW, Color.RED, Color.GREEN);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class BeersViewActivity extends AppCompatActivity
             @Override
             public void run() {
                 beersViewModel.getBeers(pageStart++, perPage);
-                refreshLayout.setRefreshing(false);
+                binding.refreshlayout.setRefreshing(false);
             }
         }, 1000);
     }

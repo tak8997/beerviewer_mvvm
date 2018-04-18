@@ -10,4 +10,5 @@ public interface BeersViewNavigator {
     void showItemsFromBottom(final List<BeerModel> beers, final int position);
 
 
+    void startBeerDetailActivity(int beerId);
 }

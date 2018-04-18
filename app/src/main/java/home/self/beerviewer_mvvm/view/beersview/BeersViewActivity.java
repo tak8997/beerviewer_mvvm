@@ -1,5 +1,6 @@
 package home.self.beerviewer_mvvm.view.beersview;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Handler;
@@ -10,13 +11,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
+import home.self.beerviewer_mvvm.Constant;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerRepository;
@@ -26,6 +25,7 @@ import home.self.beerviewer_mvvm.databinding.ActivityBeersViewBinding;
 import home.self.beerviewer_mvvm.rxbus.Events;
 import home.self.beerviewer_mvvm.rxbus.RxEventBus;
 import home.self.beerviewer_mvvm.view.OnBottomReachedListener;
+import home.self.beerviewer_mvvm.view.beerdetail.BeerDetailActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -34,14 +34,14 @@ public class BeersViewActivity extends AppCompatActivity
 
     private static final String TAG = BeersViewActivity.class.getSimpleName();
 
-    @BindView(R.id.refreshlayout)
-    SwipeRefreshLayout refreshLayout;
-
-    @BindView(R.id.beer_recyler)
-    RecyclerView beerRecycler;
-
-    @BindView(R.id.app_bar)
-    Toolbar toolbar;
+//    @BindView(R.id.refreshlayout)
+//    SwipeRefreshLayout refreshLayout;
+//
+//    @BindView(R.id.beer_recyler)
+//    RecyclerView beerRecycler;
+//
+//    @BindView(R.id.app_bar)
+//    Toolbar toolbar;
 
     private BeersViewModel beersViewModel;
     private ActivityBeersViewBinding binding;
@@ -62,10 +62,12 @@ public class BeersViewActivity extends AppCompatActivity
 
         initView();
         onEventBusCalled();
+
+        beersViewModel.getBeers(pageStart++, perPage);
     }
 
     private void initView() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.appBar);
 
         adapter = new BeersAdapter(this);
         adapter.setOnBottomReachedListener(this);
@@ -89,6 +91,13 @@ public class BeersViewActivity extends AppCompatActivity
                 adapter.addItemsFromBottom(beers, position);
             }
         });
+    }
+
+    @Override
+    public void startBeerDetailActivity(int beerId) {
+        Intent intent = new Intent(this, BeerDetailActivity.class);
+        intent.putExtra(Constant.KEY_BEAR_ID, beerId);
+        startActivity(intent);
     }
 
     @Override

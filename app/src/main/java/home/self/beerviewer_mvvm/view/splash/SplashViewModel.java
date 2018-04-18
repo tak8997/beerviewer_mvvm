@@ -20,8 +20,10 @@ public class SplashViewModel extends BaseObservable {
     private final BeerRepository beerRepository;
 
     public SplashViewModel(SplashNavigator splashView, BeerRepository beerRepository) {
-        this.splashView = splashView;
         this.beerRepository = beerRepository;
+        this.splashView = splashView;
+
+        this.splashView.showSplashAnimation();
     }
 
 

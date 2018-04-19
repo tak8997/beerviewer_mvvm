@@ -1,7 +1,6 @@
 package home.self.beerviewer_mvvm;
 
 import android.app.Activity;
-import android.app.Application;
 
 import com.squareup.leakcanary.LeakCanary;
 
@@ -11,7 +10,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
 import dagger.android.DispatchingAndroidInjector;
 
-public class BeerViewerApplication extends Application {
+public class BeerViewerApplication extends DaggerApplication {
 
     @Inject
     DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
@@ -24,6 +23,11 @@ public class BeerViewerApplication extends Application {
         instance = this;
 
         initMemoryLeakDetection();
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().application(this).build();
     }
 
     private void initMemoryLeakDetection() {

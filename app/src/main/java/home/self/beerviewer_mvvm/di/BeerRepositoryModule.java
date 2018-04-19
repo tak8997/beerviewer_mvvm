@@ -4,22 +4,16 @@ package home.self.beerviewer_mvvm.di;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import com.example.administrator.beerviewer.Constant;
-import com.example.administrator.beerviewer.data.source.BeerDataSource;
-import com.example.administrator.beerviewer.data.source.Local;
-import com.example.administrator.beerviewer.data.source.Remote;
-import com.example.administrator.beerviewer.data.source.local.BeerDao;
-import com.example.administrator.beerviewer.data.source.local.BeerDatabase;
-import com.example.administrator.beerviewer.data.source.local.BeerLocalDataSource;
-import com.example.administrator.beerviewer.data.source.remote.BeerRemoteDataSource;
-import com.example.administrator.beerviewer.network.BeerApiService;
-
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import home.self.beerviewer_mvvm.Constant;
+import home.self.beerviewer_mvvm.data.source.local.BeerDao;
+import home.self.beerviewer_mvvm.data.source.local.BeerDatabase;
+import home.self.beerviewer_mvvm.network.BeerApiService;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -79,18 +73,18 @@ public class BeerRepositoryModule {
         return beerDatabase.beerDao();
     }
 
-    @Provides
-    @Singleton
-    @Remote
-    BeerDataSource provideBeerRemoteDataSource(BeerApiService beerApiService) {
-        return new BeerRemoteDataSource(beerApiService);
-    }
-
-    @Provides
-    @Singleton
-    @Local
-    BeerDataSource provideBeerLocalDataSource(BeerDao beerDao) {
-        return new BeerLocalDataSource(beerDao);
-    }
+//    @Provides
+//    @Singleton
+//    @Remote
+//    BeerDataSource provideBeerRemoteDataSource(BeerApiService beerApiService) {
+//        return new BeerRemoteDataSource(beerApiService);
+//    }
+//
+//    @Provides
+//    @Singleton
+//    @Local
+//    BeerDataSource provideBeerLocalDataSource(BeerDao beerDao) {
+//        return new BeerLocalDataSource(beerDao);
+//    }
 
 }

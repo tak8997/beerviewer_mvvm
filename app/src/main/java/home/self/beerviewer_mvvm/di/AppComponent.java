@@ -3,14 +3,13 @@ package home.self.beerviewer_mvvm.di;
 
 import android.app.Application;
 
-import com.example.administrator.beerviewer.BeerViewerApplication;
-
 import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
+import home.self.beerviewer_mvvm.BeerViewerApplication;
 
 /**
  * This is a Dagger component. Refer to {@link BeerViewerApplication} for the list of Dagger components

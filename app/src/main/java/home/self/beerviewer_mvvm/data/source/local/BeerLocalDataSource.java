@@ -4,6 +4,9 @@ import android.util.Log;
 import java.util.List;
 
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerDataSource;
 import home.self.beerviewer_mvvm.rxbus.Events;
@@ -11,13 +14,14 @@ import home.self.beerviewer_mvvm.rxbus.RxEventBus;
 import home.self.beerviewer_mvvm.util.IndexUtil;
 import io.reactivex.Single;
 
-
-public class BeerLocalDataSource implements BeerDataSource{
+@Singleton
+public class BeerLocalDataSource implements BeerDataSource {
 
     private BeerDao beerDao;
 
-    public BeerLocalDataSource() {
-        this.beerDao = BeerDatabase.getInstance().beerDao();
+    @Inject
+    public BeerLocalDataSource(BeerDao beerDao) {
+        this.beerDao = beerDao;
     }
 
     private void sendEventBus() {

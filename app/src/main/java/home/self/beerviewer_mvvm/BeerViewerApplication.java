@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
 import dagger.android.DispatchingAndroidInjector;
+import home.self.beerviewer_mvvm.di.DaggerAppComponent;
 
 public class BeerViewerApplication extends DaggerApplication {
 
@@ -36,11 +37,6 @@ public class BeerViewerApplication extends DaggerApplication {
 
         LeakCanary.install(this);
     }
-
-//    @Override
-//    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-//        return DaggerAppComponent.builder().application(this).build();
-//    }
 
     public static BeerViewerApplication getInstance() {
         return instance;

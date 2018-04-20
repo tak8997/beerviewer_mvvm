@@ -3,6 +3,8 @@ package home.self.beerviewer_mvvm.view.beerdetail;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
 
+import javax.inject.Inject;
+
 import home.self.beerviewer_mvvm.BeerViewerApplication;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
@@ -24,9 +26,9 @@ public class BeerDetailViewModel extends BaseObservable {
 
     private String beerInfo;
 
-    public BeerDetailViewModel(BeerDataSource beerRepository, BeerDetailNavigator beerDetailView) {
+    @Inject
+    public BeerDetailViewModel(BeerDataSource beerRepository) {
         this.beerRepository = beerRepository;
-        this.beerDetailView = beerDetailView;
     }
 
     public void getBeer(int beerId) {
@@ -66,5 +68,9 @@ public class BeerDetailViewModel extends BaseObservable {
 
     public void processBeerContent() {
         beerDetailView.showShareDialog(beerInfo);
+    }
+
+    public void takeView(BeerDetailNavigator beerDetailView) {
+        this.beerDetailView = beerDetailView;
     }
 }

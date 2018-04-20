@@ -14,7 +14,10 @@ import android.support.v7.widget.Toolbar;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
+import dagger.android.support.DaggerAppCompatActivity;
 import home.self.beerviewer_mvvm.Constant;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
@@ -29,7 +32,7 @@ import home.self.beerviewer_mvvm.view.beerdetail.BeerDetailActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class BeersViewActivity extends AppCompatActivity
+public class BeersViewActivity extends DaggerAppCompatActivity
         implements SwipeRefreshLayout.OnRefreshListener, OnBottomReachedListener, BeersViewNavigator {
 
     private static final String TAG = BeersViewActivity.class.getSimpleName();
@@ -43,7 +46,8 @@ public class BeersViewActivity extends AppCompatActivity
 //    @BindView(R.id.app_bar)
 //    Toolbar toolbar;
 
-    private BeersViewModel beersViewModel;
+    @Inject
+    BeersViewModel beersViewModel;
     private ActivityBeersViewBinding binding;
 
     private BeersAdapter adapter;
@@ -57,12 +61,12 @@ public class BeersViewActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_beers_view);
-        beersViewModel = new BeersViewModel(new BeerRepository(new BeerRemoteDataSource(), new BeerLocalDataSource()), this);
         binding.setViewModel(beersViewModel);
 
         initView();
         onEventBusCalled();
 
+        beersViewModel.takeView(this);
         beersViewModel.getBeers(pageStart++, perPage);
     }
 

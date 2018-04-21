@@ -5,6 +5,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import home.self.beerviewer_mvvm.BeerViewerApplication;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
@@ -16,14 +18,12 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SplashViewModel extends BaseObservable {
 
-    private final SplashNavigator splashView;
-    private final BeerRepository beerRepository;
+    private SplashNavigator splashView;
+    private BeerRepository beerRepository;
 
-    public SplashViewModel(SplashNavigator splashView, BeerRepository beerRepository) {
+    @Inject
+    public SplashViewModel(BeerRepository beerRepository) {
         this.beerRepository = beerRepository;
-        this.splashView = splashView;
-
-        this.splashView.showSplashAnimation();
     }
 
 
@@ -51,5 +51,10 @@ public class SplashViewModel extends BaseObservable {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    public void takeView(SplashNavigator splashView) {
+        this.splashView = splashView;
+        this.splashView.showSplashAnimation();
     }
 }

@@ -4,6 +4,8 @@ import android.databinding.BaseObservable;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerDataSource;
 import home.self.beerviewer_mvvm.data.source.BeerRepository;
@@ -13,9 +15,9 @@ public class BeersViewModel extends BaseObservable {
     private BeerRepository beerRepository;
     private BeersViewNavigator beersView;
 
-    public BeersViewModel(BeerRepository beerRepository, BeersViewNavigator beersView) {
+    @Inject
+    public BeersViewModel(BeerRepository beerRepository) {
         this.beerRepository = beerRepository;
-        this.beersView = beersView;
     }
 
     public void getBeers(int pageStart, int perPage) {
@@ -44,6 +46,10 @@ public class BeersViewModel extends BaseObservable {
 
             }
         });
+    }
+
+    public void takeView(BeersViewNavigator beersView) {
+        this.beersView = beersView;
     }
 }
 

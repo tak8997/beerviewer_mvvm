@@ -11,8 +11,13 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import home.self.beerviewer_mvvm.Constant;
+import home.self.beerviewer_mvvm.data.source.BeerDataSource;
+import home.self.beerviewer_mvvm.data.source.Local;
+import home.self.beerviewer_mvvm.data.source.Remote;
 import home.self.beerviewer_mvvm.data.source.local.BeerDao;
 import home.self.beerviewer_mvvm.data.source.local.BeerDatabase;
+import home.self.beerviewer_mvvm.data.source.local.BeerLocalDataSource;
+import home.self.beerviewer_mvvm.data.source.remote.BeerRemoteDataSource;
 import home.self.beerviewer_mvvm.network.BeerApiService;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -73,18 +78,18 @@ public class BeerRepositoryModule {
         return beerDatabase.beerDao();
     }
 
-//    @Provides
-//    @Singleton
-//    @Remote
-//    BeerDataSource provideBeerRemoteDataSource(BeerApiService beerApiService) {
-//        return new BeerRemoteDataSource(beerApiService);
-//    }
-//
-//    @Provides
-//    @Singleton
-//    @Local
-//    BeerDataSource provideBeerLocalDataSource(BeerDao beerDao) {
-//        return new BeerLocalDataSource(beerDao);
-//    }
+    @Provides
+    @Singleton
+    @Remote
+    BeerDataSource provideBeerRemoteDataSource(BeerApiService beerApiService) {
+        return new BeerRemoteDataSource(beerApiService);
+    }
+
+    @Provides
+    @Singleton
+    @Local
+    BeerDataSource provideBeerLocalDataSource(BeerDao beerDao) {
+        return new BeerLocalDataSource(beerDao);
+    }
 
 }

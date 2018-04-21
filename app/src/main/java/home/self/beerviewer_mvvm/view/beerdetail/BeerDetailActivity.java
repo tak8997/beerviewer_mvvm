@@ -8,6 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 import home.self.beerviewer_mvvm.Constant;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
@@ -16,9 +19,10 @@ import home.self.beerviewer_mvvm.data.source.local.BeerLocalDataSource;
 import home.self.beerviewer_mvvm.data.source.remote.BeerRemoteDataSource;
 import home.self.beerviewer_mvvm.databinding.ActivityBeerDetailBinding;
 
-public class BeerDetailActivity extends AppCompatActivity implements BeerDetailNavigator {
+public class BeerDetailActivity extends DaggerAppCompatActivity implements BeerDetailNavigator {
 
-    private BeerDetailViewModel viewModel;
+    @Inject
+    BeerDetailViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +30,9 @@ public class BeerDetailActivity extends AppCompatActivity implements BeerDetailN
         int beerId = getIntent().getIntExtra(Constant.KEY_BEAR_ID, -1);
 
         ActivityBeerDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_beer_detail);
-        viewModel = new BeerDetailViewModel(new BeerRepository(new BeerRemoteDataSource(), new BeerLocalDataSource()), this);
         binding.setViewModel(viewModel);
 
+        viewModel.takeView(this);
         viewModel.getBeer(beerId);
     }
 

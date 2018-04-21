@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import io.reactivex.Single;
 
+@Singleton
 public class BeerRepository implements BeerDataSource {
 
     private static final String TAG = BeerRepository.class.getSimpleName();
@@ -19,8 +20,9 @@ public class BeerRepository implements BeerDataSource {
     private BeerDataSource beerLocalDataSource;
     private boolean isCache = true;
 
-    public BeerRepository(BeerDataSource beerRemoteDataSource,
-                          BeerDataSource beerLocalDataSource) {
+    @Inject
+    public BeerRepository(@Remote BeerDataSource beerRemoteDataSource,
+                          @Local BeerDataSource beerLocalDataSource) {
         this.beerRemoteDataSource = beerRemoteDataSource;
         this.beerLocalDataSource = beerLocalDataSource;
     }

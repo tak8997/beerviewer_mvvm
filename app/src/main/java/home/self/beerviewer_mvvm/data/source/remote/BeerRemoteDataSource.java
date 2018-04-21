@@ -16,10 +16,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+@Singleton
 public class BeerRemoteDataSource implements BeerDataSource {
 
-    public BeerRemoteDataSource() {
-        this.apiService = BeerViewerClient.createService(BeerApiService.class);
+    @Inject
+    public BeerRemoteDataSource(BeerApiService apiService) {
+        this.apiService = apiService;
     }
 
     private final BeerApiService apiService;

@@ -2,30 +2,33 @@ package home.self.beerviewer_mvvm.view.splash;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 import home.self.beerviewer_mvvm.R;
-import home.self.beerviewer_mvvm.view.beersview.BeersViewActivity;
-import home.self.beerviewer_mvvm.data.source.BeerRepository;
-import home.self.beerviewer_mvvm.data.source.local.BeerDatabase;
-import home.self.beerviewer_mvvm.data.source.local.BeerLocalDataSource;
-import home.self.beerviewer_mvvm.data.source.remote.BeerRemoteDataSource;
 import home.self.beerviewer_mvvm.databinding.ActivitySplashBinding;
+import home.self.beerviewer_mvvm.view.beersview.BeersViewActivity;
 
-public class SplashActivity extends AppCompatActivity implements SplashNavigator {
+public class SplashActivity extends DaggerAppCompatActivity implements SplashNavigator {
 
-    private SplashViewModel splashViewModel;
+    @Inject
+    SplashViewModel splashViewModel;
+
+    private ActivitySplashBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivitySplashBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
-        splashViewModel = new SplashViewModel(this, new BeerRepository(new BeerRemoteDataSource(), new BeerLocalDataSource()));
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         binding.setViewModel(splashViewModel);
+
+        splashViewModel.takeView(this);
     }
 
     @Override
@@ -41,11 +44,11 @@ public class SplashActivity extends AppCompatActivity implements SplashNavigator
 
     @Override
     public void showSplashAnimation() {
-        final ImageView imgSplash = findViewById(R.id.beer_animation);
+//        final ImageView imgSplash = findViewById(R.id.beer_animation);
         Glide.with(this)
                 .asGif()
                 .load(R.raw.beer_splash)
-                .into(imgSplash);
+                .into(binding.beerAnimation);
     }
 
     @Override

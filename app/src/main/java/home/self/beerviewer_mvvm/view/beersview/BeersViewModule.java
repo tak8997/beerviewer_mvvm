@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import home.self.beerviewer_mvvm.data.source.BeerRepository;
 import home.self.beerviewer_mvvm.di.ActivityScope;
+import home.self.beerviewer_mvvm.rx.schedulers.BaseSchedulerProvider;
 
 /**
  * Created by Tak on 2018. 4. 19..
@@ -15,7 +16,7 @@ public class BeersViewModule {
 
     @Provides
     @ActivityScope
-    BeersViewModel provideBeersViewModel(BeerRepository beerRepository) {
-        return new BeersViewModel(beerRepository);
+    BeersViewModel provideBeersViewModel(BeerRepository beerRepository, BaseSchedulerProvider schedulerProvider) {
+        return new BeersViewModel(beerRepository, schedulerProvider);
     }
 }

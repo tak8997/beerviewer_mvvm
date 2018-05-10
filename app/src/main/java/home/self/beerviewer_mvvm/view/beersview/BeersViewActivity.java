@@ -9,6 +9,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,18 +29,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class BeersViewActivity extends DaggerAppCompatActivity
-        implements SwipeRefreshLayout.OnRefreshListener, OnBottomReachedListener, BeersViewNavigator {
+        implements SwipyRefreshLayout.OnRefreshListener, OnBottomReachedListener, BeersViewNavigator {
 
     private static final String TAG = BeersViewActivity.class.getSimpleName();
-
-//    @BindView(R.id.refreshlayout)
-//    SwipeRefreshLayout refreshLayout;
-//
-//    @BindView(R.id.beer_recyler)
-//    RecyclerView beerRecycler;
-//
-//    @BindView(R.id.app_bar)
-//    Toolbar toolbar;
 
     @Inject
     BeersViewModel beersViewModel;
@@ -57,7 +51,6 @@ public class BeersViewActivity extends DaggerAppCompatActivity
         binding.setViewModel(beersViewModel);
 
         initView();
-        onEventBusCalled();
 
         beersViewModel.takeView(this);
         beersViewModel.getBeers(pageStart++, perPage);
@@ -67,12 +60,11 @@ public class BeersViewActivity extends DaggerAppCompatActivity
         setSupportActionBar(binding.appBar);
 
         adapter = new BeersAdapter(this);
-        adapter.setOnBottomReachedListener(this);
         binding.beerRecyler.setLayoutManager(new LinearLayoutManager(this));
         binding.beerRecyler.setAdapter(adapter);
 
-        binding.refreshlayout.setOnRefreshListener(this);
-        binding.refreshlayout.setColorSchemeColors(Color.YELLOW, Color.RED, Color.GREEN);
+        binding.refreshLayout.setOnRefreshListener(this);
+        binding.refreshLayout.setColorSchemeColors(Color.YELLOW, Color.RED, Color.GREEN);
     }
 
     @Override
@@ -98,28 +90,23 @@ public class BeersViewActivity extends DaggerAppCompatActivity
     }
 
     @Override
-    public void onRefresh() {
+    public void onBottomReached(int position) {
+        beersViewModel.getBeersFromBottom(pageStart++, perPage, position);
+    }
+
+    @Override
+    public void onRefresh(SwipyRefreshLayoutDirection direction) {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 beersViewModel.getBeers(pageStart++, perPage);
-                binding.refreshlayout.setRefreshing(false);
+                binding.refreshLayout.setRefreshing(false);
             }
         }, 1000);
     }
 
     @Override
-    public void onBottomReached(int position) {
-        beersViewModel.getBeersFromBottom(pageStart++, perPage, position);
-    }
-
-    private void onEventBusCalled() {
-        RxEventBus.getInstance().getBusObservable()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    if (event instanceof Events.PageEvent)
-                        pageStart = 1;
-                });
+    public void setPageStart() {
+        pageStart = 1;
     }
 }

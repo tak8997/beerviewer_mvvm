@@ -11,4 +11,6 @@ public interface BeersViewNavigator {
 
 
     void startBeerDetailActivity(int beerId);
+
+    void setPageStart();
 }

@@ -23,7 +23,6 @@ import home.self.beerviewer_mvvm.view.OnBottomReachedListener;
 public class BeersAdapter extends RecyclerView.Adapter<BeersViewHolder> {
 
     private List<BeerModel> items = new ArrayList<>();
-    private OnBottomReachedListener listener;
 
     private BeersViewNavigator beersView;
 
@@ -40,14 +39,7 @@ public class BeersAdapter extends RecyclerView.Adapter<BeersViewHolder> {
 
     @Override
     public void onBindViewHolder(BeersViewHolder holder, int position) {
-        if (position == items.size() - 1)
-            listener.onBottomReached(position);
-
         holder.bindItem(items.get(position));
-    }
-
-    public void setOnBottomReachedListener(OnBottomReachedListener onBottomReachedListener) {
-        this.listener = onBottomReachedListener;
     }
 
     @Override

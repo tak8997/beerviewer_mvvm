@@ -9,9 +9,10 @@ import javax.inject.Singleton;
 
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerDataSource;
-import home.self.beerviewer_mvvm.rxbus.Events;
-import home.self.beerviewer_mvvm.rxbus.RxEventBus;
+import home.self.beerviewer_mvvm.rx.rxbus.Events;
+import home.self.beerviewer_mvvm.rx.rxbus.RxEventBus;
 import home.self.beerviewer_mvvm.util.IndexUtil;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 @Singleton
@@ -29,7 +30,7 @@ public class BeerLocalDataSource implements BeerDataSource {
     }
 
     @Override
-    public void addBeers(List<BeerModel> beers) {
+    public void saveBeers(List<BeerModel> beers) {
         List<BeerModel> previous = beerDao.getAllBeers();
         List<BeerModel> inserts = beers;
 
@@ -38,7 +39,7 @@ public class BeerLocalDataSource implements BeerDataSource {
     }
 
     @Override
-    public Single<List<BeerModel>> getBeers() {
+    public Maybe<List<BeerModel>> getBeers() {
         return null;
     }
 

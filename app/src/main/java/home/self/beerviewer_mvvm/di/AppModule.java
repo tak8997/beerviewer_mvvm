@@ -7,6 +7,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import home.self.beerviewer_mvvm.rx.schedulers.BaseSchedulerProvider;
+import home.self.beerviewer_mvvm.rx.schedulers.SchedulerProvider;
 
 @Module
 public class AppModule {
@@ -15,5 +17,11 @@ public class AppModule {
     @Singleton
     Context provideContext(Application application) {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    BaseSchedulerProvider provideSchedulerProvider() {
+        return new SchedulerProvider();
     }
 }

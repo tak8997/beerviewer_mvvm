@@ -10,6 +10,7 @@ import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerDataSource;
 import home.self.beerviewer_mvvm.network.BeerApiService;
 import home.self.beerviewer_mvvm.network.BeerViewerClient;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,10 +28,10 @@ public class BeerRemoteDataSource implements BeerDataSource {
     private final BeerApiService apiService;
 
     @Override
-    public void addBeers(List<BeerModel> beers) { }
+    public void saveBeers(List<BeerModel> beers) { }
 
     @Override
-    public Single<List<BeerModel>> getBeers() {
+    public Maybe<List<BeerModel>> getBeers() {
         return apiService.getBeers();
     }
 

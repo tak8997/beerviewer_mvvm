@@ -1,4 +1,4 @@
-package home.self.beerviewer_mvvm.rxbus;
+package home.self.beerviewer_mvvm.rx.rxbus;
 
 public class Events {
 

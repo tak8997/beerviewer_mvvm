@@ -11,6 +11,7 @@ import home.self.beerviewer_mvvm.BeerViewerApplication;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerRepository;
+import home.self.beerviewer_mvvm.rx.schedulers.BaseSchedulerProvider;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -19,42 +20,37 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashViewModel extends BaseObservable {
 
     private SplashNavigator splashView;
+
     private BeerRepository beerRepository;
+    private BaseSchedulerProvider schedulerProvider;
+
+    private Disposable disposable;
 
     @Inject
-    public SplashViewModel(BeerRepository beerRepository) {
+    public SplashViewModel(BeerRepository beerRepository, BaseSchedulerProvider schedulerProvider) {
         this.beerRepository = beerRepository;
+        this.schedulerProvider = schedulerProvider;
     }
 
+    public void subscribe() {
+        getBeers();
+    }
 
     public void getBeers() {
-        beerRepository.getBeers()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<BeerModel>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) { }
-
-                    @Override
-                    public void onSuccess(List<BeerModel> beerModels) {
-                        List<BeerModel> beers = beerModels;
-                        Log.d("SplashActivity", "beer_size : " + beers.size() + "");
-                        if(beers != null) {
-                            beerRepository.addBeers(beers);
-                            splashView.startBeerViewActivity();
-                        } else
-                            splashView.showFailureMessage(BeerViewerApplication.getInstance().getString(R.string.no_data));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-                });
+        disposable = beerRepository.getBeers()
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .subscribe(beerModels -> splashView.startBeerViewActivity(),
+                        throwable -> splashView.showFailureMessage(BeerViewerApplication.getInstance().getString(R.string.no_data)));
     }
 
     public void takeView(SplashNavigator splashView) {
         this.splashView = splashView;
         this.splashView.showSplashAnimation();
+    }
+
+
+    public void unsubscribe() {
+        disposable.dispose();
     }
 }

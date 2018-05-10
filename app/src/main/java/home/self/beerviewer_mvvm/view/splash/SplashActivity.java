@@ -34,7 +34,13 @@ public class SplashActivity extends DaggerAppCompatActivity implements SplashNav
     @Override
     protected void onResume() {
         super.onResume();
-        splashViewModel.getBeers();
+        splashViewModel.subscribe();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        splashViewModel.unsubscribe();
     }
 
     @Override
@@ -44,7 +50,6 @@ public class SplashActivity extends DaggerAppCompatActivity implements SplashNav
 
     @Override
     public void showSplashAnimation() {
-//        final ImageView imgSplash = findViewById(R.id.beer_animation);
         Glide.with(this)
                 .asGif()
                 .load(R.raw.beer_splash)

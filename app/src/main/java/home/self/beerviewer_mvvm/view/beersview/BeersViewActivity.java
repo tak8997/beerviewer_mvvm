@@ -6,27 +6,20 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import dagger.android.support.DaggerAppCompatActivity;
 import home.self.beerviewer_mvvm.Constant;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
-import home.self.beerviewer_mvvm.data.source.BeerRepository;
-import home.self.beerviewer_mvvm.data.source.local.BeerLocalDataSource;
-import home.self.beerviewer_mvvm.data.source.remote.BeerRemoteDataSource;
 import home.self.beerviewer_mvvm.databinding.ActivityBeersViewBinding;
-import home.self.beerviewer_mvvm.rxbus.Events;
-import home.self.beerviewer_mvvm.rxbus.RxEventBus;
+import home.self.beerviewer_mvvm.rx.rxbus.Events;
+import home.self.beerviewer_mvvm.rx.rxbus.RxEventBus;
 import home.self.beerviewer_mvvm.view.OnBottomReachedListener;
 import home.self.beerviewer_mvvm.view.beerdetail.BeerDetailActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;

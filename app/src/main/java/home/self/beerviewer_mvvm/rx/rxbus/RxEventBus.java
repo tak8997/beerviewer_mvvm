@@ -1,4 +1,4 @@
-package home.self.beerviewer_mvvm.rxbus;
+package home.self.beerviewer_mvvm.rx.rxbus;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;

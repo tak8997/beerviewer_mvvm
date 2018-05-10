@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import home.self.beerviewer_mvvm.data.model.BeerModel;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 @Singleton
@@ -58,14 +59,22 @@ public class BeerRepository implements BeerDataSource {
     }
 
     @Override
-    public void addBeers(List<BeerModel> beers) {
-        beerLocalDataSource.addBeers(beers);
+    public void saveBeers(List<BeerModel> beers) {
+        beerLocalDataSource.saveBeers(beers);
     }
 
     @Override
-    public Single<List<BeerModel>> getBeers() {
-        return beerRemoteDataSource.getBeers();
+    public Maybe<List<BeerModel>> getBeers() {
+        return beerRemoteDataSource.getBeers()
+                .filter(beers-> {
+                    if (!beers.isEmpty()) {
+                        saveBeers(beers);    //save local cache
+                        return true;
+                    } else
+                        return false;
+                });
     }
+
 
     /**
      * local cache check

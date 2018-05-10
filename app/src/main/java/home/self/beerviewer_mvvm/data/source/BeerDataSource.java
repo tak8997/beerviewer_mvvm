@@ -4,6 +4,7 @@ package home.self.beerviewer_mvvm.data.source;
 import java.util.List;
 
 import home.self.beerviewer_mvvm.data.model.BeerModel;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public interface BeerDataSource {
@@ -22,9 +23,9 @@ public interface BeerDataSource {
         void onDataNotAvailable();
     }
 
-    void addBeers(List<BeerModel> beers);
+    void saveBeers(List<BeerModel> beers);
 
-    Single<List<BeerModel>> getBeers();
+    Maybe<List<BeerModel>> getBeers();
 
     void getBeers(int pageStart, int perPage, LoadBeersCallback callback);
 

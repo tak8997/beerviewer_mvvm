@@ -53,12 +53,11 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
     // di
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-    implementation 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    implementation 'com.google.dagger:dagger:2.14.1'
     compileOnly 'javax.annotation:jsr250-api:1.0'
-
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
-    implementation 'com.google.dagger:dagger-android-support:2.11'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
+    implementation 'com.google.dagger:dagger-android-support:2.14.1'
 
     // rx
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'

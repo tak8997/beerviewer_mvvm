@@ -29,7 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class BeersViewActivity extends DaggerAppCompatActivity
-        implements SwipyRefreshLayout.OnRefreshListener, OnBottomReachedListener, BeersViewNavigator {
+        implements SwipyRefreshLayout.OnRefreshListener, BeersViewNavigator {
 
     private static final String TAG = BeersViewActivity.class.getSimpleName();
 
@@ -53,7 +53,7 @@ public class BeersViewActivity extends DaggerAppCompatActivity
         initView();
 
         beersViewModel.takeView(this);
-        beersViewModel.getBeers(pageStart++, perPage);
+        beersViewModel.getBeers(pageStart++, perPage, SwipyRefreshLayoutDirection.TOP);
     }
 
     private void initView() {
@@ -73,13 +73,8 @@ public class BeersViewActivity extends DaggerAppCompatActivity
     }
 
     @Override
-    public void showItemsFromBottom(final List<BeerModel> beers, final int position) {
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                adapter.addItemsFromBottom(beers, position);
-            }
-        });
+    public void showItemsFromBottom(List<BeerModel> beers) {
+        adapter.addItemsFromBottom(beers);
     }
 
     @Override
@@ -90,16 +85,11 @@ public class BeersViewActivity extends DaggerAppCompatActivity
     }
 
     @Override
-    public void onBottomReached(int position) {
-        beersViewModel.getBeersFromBottom(pageStart++, perPage, position);
-    }
-
-    @Override
     public void onRefresh(SwipyRefreshLayoutDirection direction) {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                beersViewModel.getBeers(pageStart++, perPage);
+                beersViewModel.getBeers(pageStart++, perPage, direction);
                 binding.refreshLayout.setRefreshing(false);
             }
         }, 1000);

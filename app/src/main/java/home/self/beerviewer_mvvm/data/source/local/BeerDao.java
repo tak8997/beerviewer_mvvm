@@ -11,6 +11,7 @@ import java.util.List;
 
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.model.WishModel;
+import io.reactivex.Single;
 
 
 /**
@@ -24,7 +25,7 @@ public interface BeerDao {
     List<BeerModel> getAllBeers();
 
     @Query("SELECT * FROM beer WHERE id >= :pageStart AND id <= :pageEnd")
-    List<BeerModel> getBeers(int pageStart, int pageEnd);
+    Single<List<BeerModel>> getBeers(int pageStart, int pageEnd);
 
     @Delete
     void deleteBeers(List<BeerModel> deletes);

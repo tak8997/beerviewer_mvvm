@@ -7,7 +7,7 @@ import home.self.beerviewer_mvvm.data.model.BeerModel;
 public interface BeersViewNavigator {
     void showItems(List<BeerModel> beers);
 
-    void showItemsFromBottom(final List<BeerModel> beers, final int position);
+    void showItemsFromBottom(final List<BeerModel> beers);
 
 
     void startBeerDetailActivity(int beerId);

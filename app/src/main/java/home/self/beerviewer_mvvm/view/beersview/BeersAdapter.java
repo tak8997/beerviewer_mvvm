@@ -52,8 +52,8 @@ public class BeersAdapter extends RecyclerView.Adapter<BeersViewHolder> {
         this.notifyDataSetChanged();
     }
 
-    public void addItemsFromBottom(List<BeerModel> beers, int position) {
-        this.items.addAll(position, beers);
+    public void addItemsFromBottom(List<BeerModel> beers) {
+        this.items.addAll(items.size(), beers);
         this.notifyDataSetChanged();
     }
 }

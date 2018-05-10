@@ -2,6 +2,8 @@ package home.self.beerviewer_mvvm.view.beersview;
 
 import android.databinding.BaseObservable;
 
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,7 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 public class BeersViewModel extends BaseObservable {
 
     private BeerRepository beerRepository;
-    private BaseSchedulerProvider schedulerProvider;
+//    private BaseSchedulerProvider schedulerProvider;
 
     private BeersViewNavigator beersView;
 
@@ -31,38 +33,41 @@ public class BeersViewModel extends BaseObservable {
     @Inject
     public BeersViewModel(BeerRepository beerRepository) {
         this.beerRepository = beerRepository;
-        this.schedulerProvider = new SchedulerProvider();
+//        this.schedulerProvider = new SchedulerProvider();
 
         this.compositeDisposable = new CompositeDisposable();
         onEventBusCalled();
     }
 
-    public void getBeers(int pageStart, int perPage) {
-        beerRepository.getBeers(pageStart, perPage, new BeerDataSource.LoadBeersCallback() {
-            @Override
-            public void onTaskLoaded(List<BeerModel> beers) {
-                beersView.showItems(beers);
-            }
+//    public void getBeers(int pageStart, int perPage) {
+//        beerRepository.getBeers(pageStart, perPage, new BeerDataSource.LoadBeersCallback() {
+//            @Override
+//            public void onTaskLoaded(List<BeerModel> beers) {
+//                beersView.showItems(beers);
+//            }
+//
+//            @Override
+//            public void onDataNotAvailable() {
+//
+//            }
+//        });
+//    }
 
-            @Override
-            public void onDataNotAvailable() {
 
-            }
-        });
-    }
+    void getBeers(int pageStart, int perPage, SwipyRefreshLayoutDirection direction) {
+        compositeDisposable.clear();
+        Disposable disposable = beerRepository
+                .getBeers(pageStart, perPage)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(beers-> {
+                    if (direction == SwipyRefreshLayoutDirection.TOP)
+                        beersView.showItems(beers);
+                    else if (direction == SwipyRefreshLayoutDirection.BOTTOM)
+                        beersView.showItemsFromBottom(beers);
+                });
 
-    public void getBeersFromBottom(int pageStart, int perPage, int position) {
-        beerRepository.getBeers(pageStart, perPage, new BeerDataSource.LoadBeersCallback() {
-            @Override
-            public void onTaskLoaded(List<BeerModel> beers) {
-                beersView.showItemsFromBottom(beers, position);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-
-            }
-        });
+        compositeDisposable.add(disposable);
     }
 
     private void onEventBusCalled() {

@@ -36,35 +36,38 @@ public class BeerRemoteDataSource implements BeerDataSource {
     }
 
     @Override
-    public void getBeers(int pageStart, int perPage, final BeerDataSource.LoadBeersCallback callback) {
-        apiService
-                .getBeers(pageStart, perPage)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<BeerModel>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(List<BeerModel> beerModels) {
-                        if (beerModels.size() == 0)
-                            callback.onDataNotAvailable();
-                        else
-                            callback.onTaskLoaded(beerModels);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-                });
+    public Single<List<BeerModel>> getBeers(int pageStart, int perPage) {
+        return apiService.getBeers(pageStart, perPage);
     }
+
+    //    @Override
+//    public void getBeers(int pageStart, int perPage, final BeerDataSource.LoadBeersCallback callback) {
+//        apiService
+//                .getBeers(pageStart, perPage)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new SingleObserver<List<BeerModel>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(List<BeerModel> beerModels) {
+//                        if (beerModels.size() == 0)
+//                            callback.onDataNotAvailable();
+//                        else
+//                            callback.onTaskLoaded(beerModels);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        e.printStackTrace();
+//                    }
+//                });
+//    }
 
     @Override
-    public void getBeer(int beerId, GetBeerCallback callback) {
-
-    }
+    public void getBeer(int beerId, GetBeerCallback callback) { }
 
 }

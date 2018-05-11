@@ -1,6 +1,8 @@
 package home.self.beerviewer_mvvm.data.source.remote;
 
 
+import android.util.Log;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,7 +34,7 @@ public class BeerRemoteDataSource implements BeerDataSource {
     }
 
     @Override
-    public Single<List<BeerModel>> getBeers(int pageStart, int perPage) {
+    public Flowable<List<BeerModel>> getBeers(int pageStart, int perPage) {
         return apiService.getBeers(pageStart, perPage);
     }
 

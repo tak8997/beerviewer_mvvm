@@ -50,7 +50,7 @@ public class BeerLocalDataSource implements BeerDataSource {
     }
 
     @Override
-    public Single<List<BeerModel>> getBeers(int pageStart, int perPage) {
+    public Flowable<List<BeerModel>> getBeers(int pageStart, int perPage) {
         int indexStart;
         if (pageStart == 10) {
             indexStart = IndexUtil.getIndex(pageStart);
@@ -63,7 +63,6 @@ public class BeerLocalDataSource implements BeerDataSource {
 
     @Override
     public Flowable<BeerModel> getBeer(int beerId) {
-        Log.d("zxcv", beerId + "!");
         return beerDao.getBeer(beerId);
     }
 }

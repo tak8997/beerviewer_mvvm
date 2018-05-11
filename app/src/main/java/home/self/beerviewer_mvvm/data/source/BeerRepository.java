@@ -3,6 +3,7 @@ package home.self.beerviewer_mvvm.data.source;
 import android.util.Log;
 
 
+import java.nio.file.Path;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -83,15 +84,19 @@ public class BeerRepository implements BeerDataSource {
      * @param pageStart
      * @param perPage
      */
-    //TODO : single -> flowable
     @Override
-    public Single<List<BeerModel>> getBeers(int pageStart, int perPage) {
+    public Flowable<List<BeerModel>> getBeers(int pageStart, int perPage) {
         return beerLocalDataSource.getBeers(pageStart, perPage)
                 .filter(beers-> !beers.isEmpty())
-                .switchIfEmpty(getBeersFromRemote(pageStart, perPage));     //if local is empty, get from remote
+                .switchMap(beerModels -> {
+                    if (beerModels.isEmpty())
+                        return getBeersFromRemote(pageStart, perPage);
+                    else
+                        return Flowable.just(beerModels).fromIterable(beerModels).toList().toFlowable();
+                });
     }
 
-    private SingleSource<? extends List<BeerModel>> getBeersFromRemote(int pageStart, int perPage) {
+    private Flowable<List<BeerModel>> getBeersFromRemote(int pageStart, int perPage) {
         return beerRemoteDataSource.getBeers(pageStart, perPage)
                 .filter(beers-> {
                     if (!beers.isEmpty()) {
@@ -99,7 +104,6 @@ public class BeerRepository implements BeerDataSource {
                         return true;
                     } else
                         return false;
-                })
-                .toSingle();
+                });
     }
 }

@@ -21,7 +21,7 @@ public interface BeerApiService {
     Maybe<List<BeerModel>> getBeers();
 
     @GET("beers/")
-    Single<List<BeerModel>> getBeers(@Query("page") int page, @Query("per_page") int perPage);
+    Flowable<List<BeerModel>> getBeers(@Query("page") int page, @Query("per_page") int perPage);
 
     @GET("beers/{beer_id}")
     Single<BeerModel> getBeer(@Path("beer_id") int beerId);

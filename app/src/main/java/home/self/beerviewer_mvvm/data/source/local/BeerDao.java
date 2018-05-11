@@ -26,7 +26,7 @@ public interface BeerDao {
     List<BeerModel> getAllBeers();
 
     @Query("SELECT * FROM beer WHERE id >= :pageStart AND id <= :pageEnd")
-    Single<List<BeerModel>> getBeers(int pageStart, int pageEnd);
+    Flowable<List<BeerModel>> getBeers(int pageStart, int pageEnd);
 
     @Delete
     void deleteBeers(List<BeerModel> deletes);

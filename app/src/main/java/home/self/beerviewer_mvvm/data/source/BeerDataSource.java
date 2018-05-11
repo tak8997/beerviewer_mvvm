@@ -14,7 +14,7 @@ public interface BeerDataSource {
 
     Maybe<List<BeerModel>> getBeers();
 
-    Single<List<BeerModel>> getBeers(int pageStart, int perPage);
+    Flowable<List<BeerModel>> getBeers(int pageStart, int perPage);
 
     Flowable<BeerModel> getBeer(int beerId);
 

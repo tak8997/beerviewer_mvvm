@@ -11,6 +11,7 @@ import java.util.List;
 
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.model.WishModel;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 
@@ -34,7 +35,7 @@ public interface BeerDao {
     void insertBeers(List<BeerModel> inserts);
 
     @Query("SELECT * FROM beer WHERE id = :beerId")
-    BeerModel getBeer(int beerId);
+    Flowable<BeerModel> getBeer(int beerId);
 
 
     @Query("SELECT * FROM wish WHERE id = :beerId")
@@ -43,4 +44,6 @@ public interface BeerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertWish(WishModel wish);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertBeer(BeerModel beer);
 }

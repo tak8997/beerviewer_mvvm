@@ -9,9 +9,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import home.self.beerviewer_mvvm.data.model.BeerModel;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 @Singleton
 public class BeerRepository implements BeerDataSource {
@@ -29,34 +32,33 @@ public class BeerRepository implements BeerDataSource {
         this.beerLocalDataSource = beerLocalDataSource;
     }
 
+    @Override
+    public Flowable<BeerModel> getBeer(final int beerId) {
+        return beerLocalDataSource
+                .getBeer(beerId)
+                .switchMap(beerModel -> {
+                    if (beerModel == null)
+                        return getBeerFromRemote(beerId);
+                    else
+                        return Flowable.just(beerModel);
+                });
+    }
+
+    private Flowable<BeerModel> getBeerFromRemote(int beerId) {
+        return beerRemoteDataSource
+                .getBeer(beerId)
+                .filter(beer -> {
+                    if (beer != null) {
+                        saveBeer(beer);
+                        return true;
+                    } else
+                        return false;
+                });
+    }
 
     @Override
-    public void getBeer(final int beerId, final GetBeerCallback callback) {
-        beerLocalDataSource.getBeer(beerId, new GetBeerCallback() {
-            @Override
-            public void onBeerLoaded(BeerModel beer) {
-                Log.d(TAG, "get beer local call");
-                callback.onBeerLoaded(beer);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                beerRemoteDataSource.getBeer(beerId, new GetBeerCallback() {
-                    @Override
-                    public void onBeerLoaded(BeerModel beer) {
-                        //TODO : do memory local cache
-                        Log.d(TAG, "get beer remote call");
-                        callback.onBeerLoaded(beer);
-                    }
-
-                    @Override
-                    public void onDataNotAvailable() {
-                        Log.d(TAG, "get beer remote call fail");
-                        callback.onDataNotAvailable();
-                    }
-                });
-            }
-        });
+    public void saveBeer(BeerModel beer) {
+        beerLocalDataSource.saveBeer(beer);
     }
 
     @Override
@@ -81,6 +83,7 @@ public class BeerRepository implements BeerDataSource {
      * @param pageStart
      * @param perPage
      */
+    //TODO : single -> flowable
     @Override
     public Single<List<BeerModel>> getBeers(int pageStart, int perPage) {
         return beerLocalDataSource.getBeers(pageStart, perPage)
@@ -99,33 +102,4 @@ public class BeerRepository implements BeerDataSource {
                 })
                 .toSingle();
     }
-
-//    @Override
-//    public void getBeers(final int pageStart, final int perPage, final LoadBeersCallback callback) {
-//        beerLocalDataSource.getBeers(pageStart, perPage, new LoadBeersCallback() {
-//            @Override
-//            public void onTaskLoaded(List<BeerModel> beers) {
-//                Log.d(TAG, "get beers local cache");
-//                callback.onTaskLoaded(beers);
-//            }
-//
-//            @Override
-//            public void onDataNotAvailable() {
-//                Log.d(TAG, "get beers remote call");
-//                beerRemoteDataSource.getBeers(pageStart, perPage, new LoadBeersCallback() {
-//                    @Override
-//                    public void onTaskLoaded(List<BeerModel> beers) {
-//                        callback.onTaskLoaded(beers);
-//                    }
-//
-//                    @Override
-//                    public void onDataNotAvailable() {
-//                        //TODO : 다시 local로 가서 첫번째 부터 보여줌.
-//                    }
-//                });
-//            }
-//        });
-//
-//    }
-
 }

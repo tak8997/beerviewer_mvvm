@@ -2,6 +2,7 @@ package home.self.beerviewer_mvvm.view.beerdetail;
 
 import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
+import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
@@ -9,6 +10,9 @@ import home.self.beerviewer_mvvm.BeerViewerApplication;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerDataSource;
+import home.self.beerviewer_mvvm.rx.schedulers.BaseSchedulerProvider;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class BeerDetailViewModel extends BaseObservable {
 
@@ -22,31 +26,44 @@ public class BeerDetailViewModel extends BaseObservable {
     public ObservableField<String> toolbarTitle = new ObservableField<>();
 
     private BeerDetailNavigator beerDetailView;
+
     private BeerDataSource beerRepository;
+    private BaseSchedulerProvider schedulerProvider;
+    private int beerId;
+    private CompositeDisposable compositeDisposable;
 
     private String beerInfo;
 
     @Inject
-    public BeerDetailViewModel(BeerDataSource beerRepository) {
+    public BeerDetailViewModel(BeerDataSource beerRepository, BaseSchedulerProvider schedulerProvider, int beerId) {
         this.beerRepository = beerRepository;
+        this.schedulerProvider = schedulerProvider;
+        this.beerId = beerId;
+
+        this.compositeDisposable = new CompositeDisposable();
     }
 
-    public void getBeer(int beerId) {
+    public void subscribe() {
+        getBeer();
+    }
+
+    public void getBeer() {
         if (beerId != -1) {
-            beerRepository.getBeer(beerId, new BeerDataSource.GetBeerCallback() {
-                @Override
-                public void onBeerLoaded(BeerModel beer) {
-                    showDetailBeer(beer);
+            compositeDisposable.clear();
 
-                    appendBeerContent(beer);
-                }
-
-                @Override
-                public void onDataNotAvailable() {
-                    beerDetailView.showFailureMessage(BeerViewerApplication.getInstance().getString(R.string.cannot_load_data));
-                }
-            });
+            Disposable disposable = beerRepository.getBeer(beerId)
+                    .subscribeOn(schedulerProvider.io())
+                    .observeOn(schedulerProvider.ui())
+                    .subscribe(beer -> {
+                        showDetailBeer(beer);
+                        appendBeerContent(beer);
+                    });
+            compositeDisposable.add(disposable);
         }
+    }
+
+    public void unsubscribe() {
+        compositeDisposable.clear();
     }
 
     private void showDetailBeer(BeerModel beer) {

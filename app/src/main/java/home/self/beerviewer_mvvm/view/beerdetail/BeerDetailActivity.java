@@ -24,16 +24,18 @@ public class BeerDetailActivity extends DaggerAppCompatActivity implements BeerD
     @Inject
     BeerDetailViewModel viewModel;
 
+    @Inject
+    int beerId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int beerId = getIntent().getIntExtra(Constant.KEY_BEAR_ID, -1);
 
         ActivityBeerDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_beer_detail);
         binding.setViewModel(viewModel);
 
         viewModel.takeView(this);
-        viewModel.getBeer(beerId);
+        viewModel.subscribe();
     }
 
     @Override
@@ -48,6 +50,12 @@ public class BeerDetailActivity extends DaggerAppCompatActivity implements BeerD
         intent.putExtra(Intent.EXTRA_TEXT, beerInfo);
         intent.setType("text/plain");
         startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewModel.unsubscribe();
     }
 
     @Override

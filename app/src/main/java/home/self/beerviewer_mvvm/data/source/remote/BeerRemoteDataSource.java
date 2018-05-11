@@ -9,13 +9,9 @@ import javax.inject.Singleton;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerDataSource;
 import home.self.beerviewer_mvvm.network.BeerApiService;
-import home.self.beerviewer_mvvm.network.BeerViewerClient;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 @Singleton
 public class BeerRemoteDataSource implements BeerDataSource {
@@ -39,6 +35,14 @@ public class BeerRemoteDataSource implements BeerDataSource {
     public Single<List<BeerModel>> getBeers(int pageStart, int perPage) {
         return apiService.getBeers(pageStart, perPage);
     }
+
+    @Override
+    public Flowable<BeerModel> getBeer(int beerId) {
+        return apiService.getBeer(beerId).toFlowable();
+    }
+
+    @Override
+    public void saveBeer(BeerModel beer) { }
 
     //    @Override
 //    public void getBeers(int pageStart, int perPage, final BeerDataSource.LoadBeersCallback callback) {
@@ -66,8 +70,4 @@ public class BeerRemoteDataSource implements BeerDataSource {
 //                    }
 //                });
 //    }
-
-    @Override
-    public void getBeer(int beerId, GetBeerCallback callback) { }
-
 }

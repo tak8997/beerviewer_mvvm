@@ -12,6 +12,7 @@ import home.self.beerviewer_mvvm.data.source.BeerDataSource;
 import home.self.beerviewer_mvvm.rx.rxbus.Events;
 import home.self.beerviewer_mvvm.rx.rxbus.RxEventBus;
 import home.self.beerviewer_mvvm.util.IndexUtil;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -39,6 +40,11 @@ public class BeerLocalDataSource implements BeerDataSource {
     }
 
     @Override
+    public void saveBeer(BeerModel beer) {
+        beerDao.insertBeer(beer);
+    }
+
+    @Override
     public Maybe<List<BeerModel>> getBeers() {
         return null;
     }
@@ -55,31 +61,10 @@ public class BeerLocalDataSource implements BeerDataSource {
         return beerDao.getBeers(indexStart, perPage);
     }
 
-//    @Override
-//    public void getBeers(int pageStart, int perPage, BeerDataSource.LoadBeersCallback callback) {
-//        int indexStart;
-//        if (pageStart == 10) {
-//            indexStart = IndexUtil.getIndex(pageStart);
-//            sendEventBus();
-//        } else
-//            indexStart = IndexUtil.getIndex(pageStart);
-//
-//        List<BeerModel> beers = beerDao.getBeers(indexStart, perPage);
-//        Log.d("123123s", pageStart + " , " + indexStart);
-//        Log.d("123123s", beers.size() + " !!");
-//        if (beers.size() != 0)
-//            callback.onTaskLoaded(beers);
-//        else
-//            callback.onDataNotAvailable();
-//    }
-
     @Override
-    public void getBeer(int beerId, GetBeerCallback callback) {
-        BeerModel beer = beerDao.getBeer(beerId);
-        if (beer != null)
-            callback.onBeerLoaded(beer);
-        else
-            callback.onDataNotAvailable();
+    public Flowable<BeerModel> getBeer(int beerId) {
+        Log.d("zxcv", beerId + "!");
+        return beerDao.getBeer(beerId);
     }
 }
 

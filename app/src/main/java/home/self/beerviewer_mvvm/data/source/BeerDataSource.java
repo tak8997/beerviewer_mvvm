@@ -4,24 +4,11 @@ package home.self.beerviewer_mvvm.data.source;
 import java.util.List;
 
 import home.self.beerviewer_mvvm.data.model.BeerModel;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
 public interface BeerDataSource {
-
-    interface LoadBeersCallback {
-
-        void onTaskLoaded(List<BeerModel> beers);
-
-        void onDataNotAvailable();
-    }
-
-    interface GetBeerCallback {
-
-        void onBeerLoaded(BeerModel beer);
-
-        void onDataNotAvailable();
-    }
 
     void saveBeers(List<BeerModel> beers);
 
@@ -29,7 +16,7 @@ public interface BeerDataSource {
 
     Single<List<BeerModel>> getBeers(int pageStart, int perPage);
 
-//    void getBeers(int pageStart, int perPage, LoadBeersCallback callback);
+    Flowable<BeerModel> getBeer(int beerId);
 
-    void getBeer(int beerId, GetBeerCallback callback);
+    void saveBeer(BeerModel beer);
 }

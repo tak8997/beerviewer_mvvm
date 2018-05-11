@@ -1,10 +1,8 @@
 package home.self.beerviewer_mvvm.view.beersview;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 
@@ -14,7 +12,6 @@ import java.util.List;
 import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.databinding.BeerItemBinding;
-import home.self.beerviewer_mvvm.view.OnBottomReachedListener;
 
 /**
  * Created by Tak on 2018. 1. 27..

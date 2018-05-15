@@ -10,27 +10,13 @@ import io.reactivex.Single;
 
 public interface BeerDataSource {
 
-    interface LoadBeersCallback {
-
-        void onTaskLoaded(List<BeerModel> beers);
-
-        void onDataNotAvailable();
-    }
-
-    interface GetBeerCallback {
-
-        void onBeerLoaded(BeerModel beer);
-
-        void onDataNotAvailable();
-    }
-
     void saveBeers(List<BeerModel> beers);
 
-    Flowable<List<BeerModel>> getBeers();
+    Maybe<List<BeerModel>> getBeers();
 
-    Single<List<BeerModel>> getBeers(int pageStart, int perPage);
+    Flowable<List<BeerModel>> getBeers(int pageStart, int perPage);
 
-//    void getBeers(int pageStart, int perPage, LoadBeersCallback callback);
+    Flowable<BeerModel> getBeer(int beerId);
 
-    void getBeer(int beerId, GetBeerCallback callback);
+    void saveBeer(BeerModel beer);
 }

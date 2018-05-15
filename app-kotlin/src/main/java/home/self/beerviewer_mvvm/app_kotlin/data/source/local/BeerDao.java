@@ -10,6 +10,7 @@ import java.util.List;
 
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel;
 import home.self.beerviewer_mvvm.app_kotlin.data.model.WishModel;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 
@@ -24,7 +25,7 @@ public interface BeerDao {
     List<BeerModel> getAllBeers();
 
     @Query("SELECT * FROM beer WHERE id >= :pageStart AND id <= :pageEnd")
-    Single<List<BeerModel>> getBeers(int pageStart, int pageEnd);
+    Flowable<List<BeerModel>> getBeers(int pageStart, int pageEnd);
 
     @Delete
     void deleteBeers(List<BeerModel> deletes);
@@ -33,7 +34,7 @@ public interface BeerDao {
     void insertBeers(List<BeerModel> inserts);
 
     @Query("SELECT * FROM beer WHERE id = :beerId")
-    BeerModel getBeer(int beerId);
+    Flowable<BeerModel> getBeer(int beerId);
 
 
     @Query("SELECT * FROM wish WHERE id = :beerId")
@@ -42,4 +43,6 @@ public interface BeerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertWish(WishModel wish);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertBeer(BeerModel beer);
 }

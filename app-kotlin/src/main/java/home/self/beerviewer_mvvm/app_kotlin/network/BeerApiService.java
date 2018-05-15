@@ -7,6 +7,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -16,10 +17,13 @@ import retrofit2.http.Query;
 public interface BeerApiService {
 
     @GET("beers/")
-    Flowable<List<BeerModel>> getBeers();
+    Maybe<List<BeerModel>> getBeers();
 
     @GET("beers/")
-    Single<List<BeerModel>> getBeers(@Query("page") int page, @Query("per_page") int perPage);
+    Flowable<List<BeerModel>> getBeers(@Query("page") int page, @Query("per_page") int perPage);
+
+    @GET("beers/{beer_id}")
+    Single<BeerModel> getBeer(@Path("beer_id") int beerId);
 
 //    @GET("beers/{beer_id}")
 //    Call<List<BeerModel>> getBeer(@Path("beer_id") int beerId);

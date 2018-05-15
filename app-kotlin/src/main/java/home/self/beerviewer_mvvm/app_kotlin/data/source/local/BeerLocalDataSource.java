@@ -38,12 +38,17 @@ public class BeerLocalDataSource implements BeerDataSource {
     }
 
     @Override
-    public Flowable<List<BeerModel>> getBeers() {
+    public void saveBeer(BeerModel beer) {
+        beerDao.insertBeer(beer);
+    }
+
+    @Override
+    public Maybe<List<BeerModel>> getBeers() {
         return null;
     }
 
     @Override
-    public Single<List<BeerModel>> getBeers(int pageStart, int perPage) {
+    public Flowable<List<BeerModel>> getBeers(int pageStart, int perPage) {
         int indexStart;
         if (pageStart == 10) {
             indexStart = IndexUtil.getIndex(pageStart);
@@ -54,32 +59,12 @@ public class BeerLocalDataSource implements BeerDataSource {
         return beerDao.getBeers(indexStart, perPage);
     }
 
-//    @Override
-//    public void getBeers(int pageStart, int perPage, BeerDataSource.LoadBeersCallback callback) {
-//        int indexStart;
-//        if (pageStart == 10) {
-//            indexStart = IndexUtil.getIndex(pageStart);
-//            sendEventBus();
-//        } else
-//            indexStart = IndexUtil.getIndex(pageStart);
-//
-//        List<BeerModel> beers = beerDao.getBeers(indexStart, perPage);
-//        Log.d("123123s", pageStart + " , " + indexStart);
-//        Log.d("123123s", beers.size() + " !!");
-//        if (beers.size() != 0)
-//            callback.onTaskLoaded(beers);
-//        else
-//            callback.onDataNotAvailable();
-//    }
-
     @Override
-    public void getBeer(int beerId, GetBeerCallback callback) {
-        BeerModel beer = beerDao.getBeer(beerId);
-        if (beer != null)
-            callback.onBeerLoaded(beer);
-        else
-            callback.onDataNotAvailable();
+    public Flowable<BeerModel> getBeer(int beerId) {
+        return beerDao.getBeer(beerId);
     }
+
+
 }
 
 

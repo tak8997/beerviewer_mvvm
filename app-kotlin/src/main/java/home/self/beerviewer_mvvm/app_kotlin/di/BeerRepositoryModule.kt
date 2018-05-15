@@ -30,7 +30,7 @@ class BeerRepositoryModule {
 
     @Provides
     @Singleton
-    internal fun provideOkhttpClient(): OkHttpClient {
+    fun provideOkhttpClient(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -44,7 +44,7 @@ class BeerRepositoryModule {
 
     @Provides
     @Singleton
-    internal fun retrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun retrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(Constant.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -55,13 +55,13 @@ class BeerRepositoryModule {
 
     @Provides
     @Singleton
-    internal fun provideBeerApiService(retrofit: Retrofit): BeerApiService {
+    fun provideBeerApiService(retrofit: Retrofit): BeerApiService {
         return retrofit.create(BeerApiService::class.java)
     }
 
     @Provides
     @Singleton
-    internal fun provideBeerDatabase(context: Application): BeerDatabase {
+    fun provideBeerDatabase(context: Application): BeerDatabase {
         return Room.databaseBuilder(
                 context,
                 BeerDatabase::class.java,
@@ -73,21 +73,21 @@ class BeerRepositoryModule {
 
     @Provides
     @Singleton
-    internal fun provideBeerDao(beerDatabase: BeerDatabase): BeerDao {
+    fun provideBeerDao(beerDatabase: BeerDatabase): BeerDao {
         return beerDatabase.beerDao()
     }
 
     @Provides
     @Singleton
     @Remote
-    internal fun provideBeerRemoteDataSource(beerApiService: BeerApiService): BeerDataSource {
+    fun provideBeerRemoteDataSource(beerApiService: BeerApiService): BeerDataSource {
         return BeerRemoteDataSource(beerApiService)
     }
 
     @Provides
     @Singleton
     @Local
-    internal fun provideBeerLocalDataSource(beerDao: BeerDao): BeerDataSource {
+    fun provideBeerLocalDataSource(beerDao: BeerDao): BeerDataSource {
         return BeerLocalDataSource(beerDao)
     }
 

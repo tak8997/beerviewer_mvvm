@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.util
+package home.self.beerviewer_mvvm.app_kotlin.util
 
 sealed class SupportOptional<out T : Any>(private val _value: T?) {
 

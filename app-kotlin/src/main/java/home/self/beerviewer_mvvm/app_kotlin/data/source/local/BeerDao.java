@@ -8,8 +8,8 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import home.self.beerviewer_mvvm.data.model.BeerModel;
-import home.self.beerviewer_mvvm.data.model.WishModel;
+import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel;
+import home.self.beerviewer_mvvm.app_kotlin.data.model.WishModel;
 import io.reactivex.Single;
 
 

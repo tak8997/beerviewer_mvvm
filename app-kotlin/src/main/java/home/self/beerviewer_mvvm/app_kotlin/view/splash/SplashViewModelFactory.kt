@@ -1,4 +1,16 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.splash
 
-class SplashViewModelFactory {
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
+import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
+
+class SplashViewModelFactory(val repository: BeerRepository,
+                             val schedulerProvider: BaseSchedulerProvider)
+    : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        return SplashViewModel(repository, schedulerProvider) as T
+    }
 }

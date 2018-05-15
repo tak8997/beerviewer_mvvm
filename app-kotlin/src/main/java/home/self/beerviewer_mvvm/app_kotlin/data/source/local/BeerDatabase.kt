@@ -38,7 +38,7 @@ abstract class BeerDatabase : RoomDatabase() {
         fun getInstance(): BeerDatabase {
             if (instance == null) {
                 instance = Room.databaseBuilder(
-                        BeerViewerApplication.getInstance(),
+                        BeerViewerApplication.instance,
                         BeerDatabase::class.java,
                         DB_NAME)
                         .allowMainThreadQueries()
@@ -46,7 +46,7 @@ abstract class BeerDatabase : RoomDatabase() {
                         .build()
             }
 
-            return instance
+            return instance as BeerDatabase
         }
     }
 }

@@ -23,7 +23,6 @@ public class BeersViewModel extends BaseObservable {
     private BeersViewNavigator beersView;
 
     private CompositeDisposable compositeDisposable;
-    private Disposable disposable;
 
     @Inject
     public BeersViewModel(BeerRepository beerRepository, BaseSchedulerProvider schedulerProvider) {
@@ -51,13 +50,15 @@ public class BeersViewModel extends BaseObservable {
     }
 
     private void onEventBusCalled() {
-        disposable = RxEventBus.getInstance().getBusObservable()
+        Disposable disposable = RxEventBus.getInstance().getBusObservable()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     if (event instanceof Events.PageEvent)
                         beersView.setPageStart();
                 });
+
+        compositeDisposable.add(disposable);
     }
 
     public void takeView(BeersViewNavigator beersView) {

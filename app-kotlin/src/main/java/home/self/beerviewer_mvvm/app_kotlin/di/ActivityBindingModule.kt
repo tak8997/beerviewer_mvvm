@@ -10,8 +10,7 @@ import home.self.beerviewer_mvvm.app_kotlin.view.splash.SplashModule
 abstract class ActivityBindingModule {
 
     @ContributesAndroidInjector(modules = arrayOf(SplashModule::class))
-    @ActivityScope
-    internal abstract fun splashActivity(): SplashActivity
+    abstract fun splashActivity(): SplashActivity
 
     //    @ContributesAndroidInjector(modules = BeersViewModule.class)
     //    @ActivityScope

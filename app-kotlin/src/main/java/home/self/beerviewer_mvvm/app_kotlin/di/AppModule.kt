@@ -8,19 +8,20 @@ import javax.inject.Singleton
 import dagger.Module
 import dagger.Provides
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
+import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.SchedulerProvider
 
 @Module
 class AppModule {
 
     @Provides
     @Singleton
-    internal fun provideContext(application: Application): Context {
+    fun provideContext(application: Application): Context {
         return application
     }
 
     @Provides
     @Singleton
-    internal fun provideSchedulerProvider(): BaseSchedulerProvider {
+    fun provideSchedulerProvider(): BaseSchedulerProvider {
         return SchedulerProvider()
     }
 }

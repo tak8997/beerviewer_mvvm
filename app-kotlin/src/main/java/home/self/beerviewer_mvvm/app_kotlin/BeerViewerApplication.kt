@@ -14,8 +14,7 @@ import home.self.beerviewer_mvvm.app_kotlin.di.DaggerAppComponent
 
 class BeerViewerApplication : DaggerApplication() {
 
-    @Inject
-    internal var activityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>? = null
+    @Inject lateinit var activityDispatchingAndroidInjector : DispatchingAndroidInjector<Activity>
 
     override fun onCreate() {
         super.onCreate()
@@ -37,7 +36,7 @@ class BeerViewerApplication : DaggerApplication() {
 
     companion object {
 
-        var instance: BeerViewerApplication? = null
+        lateinit var instance : BeerViewerApplication
             private set
     }
 

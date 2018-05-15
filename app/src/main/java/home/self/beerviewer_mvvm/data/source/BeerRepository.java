@@ -24,8 +24,6 @@ public class BeerRepository implements BeerDataSource {
 
     private BeerDataSource beerRemoteDataSource;
     private BeerDataSource beerLocalDataSource;
-    private boolean isCache = true;
-
     @Inject
     public BeerRepository(@Remote BeerDataSource beerRemoteDataSource,
                           @Local BeerDataSource beerLocalDataSource) {

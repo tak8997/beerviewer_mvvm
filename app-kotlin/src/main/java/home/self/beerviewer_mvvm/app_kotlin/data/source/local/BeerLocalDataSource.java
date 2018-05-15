@@ -5,11 +5,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import home.self.beerviewer_mvvm.data.model.BeerModel;
-import home.self.beerviewer_mvvm.data.source.BeerDataSource;
-import home.self.beerviewer_mvvm.rx.rxbus.Events;
-import home.self.beerviewer_mvvm.rx.rxbus.RxEventBus;
-import home.self.beerviewer_mvvm.util.IndexUtil;
+import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel;
+import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerDataSource;
+import home.self.beerviewer_mvvm.app_kotlin.rx.rxbus.Events;
+import home.self.beerviewer_mvvm.app_kotlin.rx.rxbus.RxEventBus;
+import home.self.beerviewer_mvvm.app_kotlin.util.IndexUtil;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 
@@ -37,7 +38,7 @@ public class BeerLocalDataSource implements BeerDataSource {
     }
 
     @Override
-    public Maybe<List<BeerModel>> getBeers() {
+    public Flowable<List<BeerModel>> getBeers() {
         return null;
     }
 

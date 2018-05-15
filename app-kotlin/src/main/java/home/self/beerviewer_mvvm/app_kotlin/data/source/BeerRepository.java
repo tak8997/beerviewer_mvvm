@@ -7,7 +7,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import home.self.beerviewer_mvvm.data.model.BeerModel;
+import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
@@ -64,7 +65,7 @@ public class BeerRepository implements BeerDataSource {
     }
 
     @Override
-    public Maybe<List<BeerModel>> getBeers() {
+    public Flowable<List<BeerModel>> getBeers() {
         return beerRemoteDataSource.getBeers()
                 .filter(beers-> {
                     if (!beers.isEmpty()) {

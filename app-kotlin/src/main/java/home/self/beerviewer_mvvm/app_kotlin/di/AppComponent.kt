@@ -24,7 +24,11 @@ import home.self.beerviewer_mvvm.app_kotlin.BeerViewerApplication
  */
 
 @Singleton
-@Component(modules = arrayOf(AndroidSupportInjectionModule::class, AppModule::class, ActivityBindingModule::class, BeerRepositoryModule::class))
+@Component(modules = arrayOf(
+        AndroidSupportInjectionModule::class,
+        AppModule::class,
+        ActivityBindingModule::class,
+        BeerRepositoryModule::class))
 interface AppComponent : AndroidInjector<BeerViewerApplication> {
 
     @Component.Builder

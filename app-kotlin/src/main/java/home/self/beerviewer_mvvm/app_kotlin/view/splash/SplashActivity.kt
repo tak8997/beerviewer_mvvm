@@ -2,10 +2,9 @@ package home.self.beerviewer_mvvm.app_kotlin.view.splash
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import dagger.android.support.DaggerAppCompatActivity
 import home.self.beerviewer_mvvm.app_kotlin.R
-import home.self.beerviewer_mvvm.app_kotlin.extensions.AutoClearedDisposable
+import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import home.self.beerviewer_mvvm.app_kotlin.view.beersview.BeersViewActivity
 import org.jetbrains.anko.longToast

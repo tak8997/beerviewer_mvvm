@@ -1,4 +1,4 @@
-package home.self.beerviewer_mvvm.app_kotlin.extensions
+package home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver

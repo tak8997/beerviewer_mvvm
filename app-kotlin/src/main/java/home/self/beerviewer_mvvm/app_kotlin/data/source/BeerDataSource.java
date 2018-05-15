@@ -12,7 +12,7 @@ public interface BeerDataSource {
 
     void saveBeers(List<BeerModel> beers);
 
-    Maybe<List<BeerModel>> getBeers();
+    Flowable<List<BeerModel>> getBeers();
 
     Flowable<List<BeerModel>> getBeers(int pageStart, int perPage);
 

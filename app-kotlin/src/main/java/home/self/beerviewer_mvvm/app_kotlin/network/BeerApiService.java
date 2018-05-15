@@ -17,7 +17,7 @@ import retrofit2.http.Query;
 public interface BeerApiService {
 
     @GET("beers/")
-    Maybe<List<BeerModel>> getBeers();
+    Flowable<List<BeerModel>> getBeers();
 
     @GET("beers/")
     Flowable<List<BeerModel>> getBeers(@Query("page") int page, @Query("per_page") int perPage);

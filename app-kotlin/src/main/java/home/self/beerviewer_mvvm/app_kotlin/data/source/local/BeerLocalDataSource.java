@@ -43,7 +43,7 @@ public class BeerLocalDataSource implements BeerDataSource {
     }
 
     @Override
-    public Maybe<List<BeerModel>> getBeers() {
+    public Flowable<List<BeerModel>> getBeers() {
         return null;
     }
 

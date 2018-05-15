@@ -27,7 +27,7 @@ public class BeerRemoteDataSource implements BeerDataSource {
     public void saveBeers(List<BeerModel> beers) { }
 
     @Override
-    public Maybe<List<BeerModel>> getBeers() {
+    public Flowable<List<BeerModel>> getBeers() {
         return apiService.getBeers();
     }
 

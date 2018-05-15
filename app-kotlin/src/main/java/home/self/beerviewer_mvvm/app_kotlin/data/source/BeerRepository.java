@@ -63,7 +63,7 @@ public class BeerRepository implements BeerDataSource {
     }
 
     @Override
-    public Maybe<List<BeerModel>> getBeers() {
+    public Flowable<List<BeerModel>> getBeers() {
         return beerRemoteDataSource.getBeers()
                 .filter(beers-> {
                     if (!beers.isEmpty()) {

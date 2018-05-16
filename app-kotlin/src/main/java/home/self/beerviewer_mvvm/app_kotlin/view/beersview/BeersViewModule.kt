@@ -18,5 +18,6 @@ class BeersViewModule {
             = BeersViewModelFactory(beerRepository, schedulerProvider)
 
     @Provides
-    fun provideBeersAdapter() : BeersAdapter = BeersAdapter()
+    fun provideBeersAdapter(activity: BeersViewActivity) : BeersAdapter
+            = BeersAdapter().apply { setOnItemClickListener(activity) }
 }

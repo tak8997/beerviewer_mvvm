@@ -11,13 +11,15 @@ import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutD
 import dagger.android.support.DaggerAppCompatActivity
 import home.self.beerviewer_mvvm.app_kotlin.Constant
 import home.self.beerviewer_mvvm.app_kotlin.R
+import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.SchedulerProvider
 import kotlinx.android.synthetic.main.activity_beers_view.*
+import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
-class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefreshListener {
+class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefreshListener, BeersAdapter.ItemClickListener {
 
     val disposables = AutoClearedDisposable(this)
     val viewDisposables = AutoClearedDisposable(this, false)
@@ -66,6 +68,10 @@ class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefres
 
         refresh_layout.setOnRefreshListener(this)
         refresh_layout.setColorSchemeColors(Color.YELLOW, Color.RED, Color.GREEN)
+    }
+
+    override fun onItemClick(beer: BeerModel) {
+        startActivity<BeerDetailActivity>(Constant.KEY_BEAR_ID to beer.id)
     }
 
     override fun onRefresh(direction: SwipyRefreshLayoutDirection) {

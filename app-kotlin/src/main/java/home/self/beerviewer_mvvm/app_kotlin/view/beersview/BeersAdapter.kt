@@ -3,6 +3,7 @@ package home.self.beerviewer_mvvm.app_kotlin.view.beersview
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import java.util.*
@@ -26,12 +27,14 @@ class BeersAdapter : RecyclerView.Adapter<BeersAdapter.BeersViewHolder>() {
     }
 
     fun addItems(beers: List<BeerModel>) {
-        this.items.addAll(0, beers)
-        this.notifyDataSetChanged()
-    }
+        var addLocation = 0
 
-    fun addItemsFromBottom(beers: List<BeerModel>) {
-        this.items.addAll(items.size, beers)
+        if (beers[0].direction == SwipyRefreshLayoutDirection.TOP)
+            addLocation = 0
+        else if (beers[0].direction == SwipyRefreshLayoutDirection.BOTTOM)
+            addLocation = items.size
+
+        this.items.addAll(addLocation, beers)
         this.notifyDataSetChanged()
     }
 

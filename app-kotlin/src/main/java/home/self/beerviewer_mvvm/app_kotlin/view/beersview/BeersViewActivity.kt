@@ -10,10 +10,7 @@ import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import dagger.android.support.DaggerAppCompatActivity
 import home.self.beerviewer_mvvm.app_kotlin.Constant
-
 import home.self.beerviewer_mvvm.app_kotlin.R
-import home.self.beerviewer_mvvm.app_kotlin.R.id.*
-import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.SchedulerProvider
@@ -32,7 +29,6 @@ class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefres
 
     private val handler : Handler = Handler(Looper.getMainLooper())
     private val schedulerProvider : BaseSchedulerProvider = SchedulerProvider()
-    private var beers : List<BeerModel>? = null
 
     private var pageStart = 1
     private var perPage = 25
@@ -52,21 +48,21 @@ class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefres
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.ui())
                 .subscribe {beers ->
-                    this.beers = beers
+                    adapter.addItems(beers)
                 })
 
-        viewDisposables.add(viewModel.swipeDirection
-                .observeOn(schedulerProvider.ui())
-                .subscribe {direction ->
-                    if (direction == SwipyRefreshLayoutDirection.TOP) {
-                        beers?.let { adapter.addItems(it) }
-                    }
-                    else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
-                        beers?.let { adapter.addItemsFromBottom(it) }
-                    }
-                })
-
-        viewModel.swipeDirection.onNext(SwipyRefreshLayoutDirection.TOP)
+//        viewDisposables.add(viewModel.swipeDirection
+//                .observeOn(schedulerProvider.ui())
+//                .subscribe {direction ->
+//                    if (direction == SwipyRefreshLayoutDirection.TOP) {
+//                        beers?.let { adapter.addItems(it) }
+//                    }
+//                    else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
+//                        beers?.let { adapter.addItemsFromBottom(it) }
+//                    }
+//                })
+//
+//        viewModel.swipeDirection.onNext(SwipyRefreshLayoutDirection.TOP)
     }
 
     private fun initView() {
@@ -84,7 +80,6 @@ class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefres
     override fun onRefresh(direction: SwipyRefreshLayoutDirection) {
         handler.postDelayed({
             viewModel.getBeers(pageStart, perPage, direction)
-            viewModel.swipeDirection.onNext(SwipyRefreshLayoutDirection.BOTTOM)
 
             refresh_layout.isRefreshing = false
         }, Constant.REFRESH_DELAY)

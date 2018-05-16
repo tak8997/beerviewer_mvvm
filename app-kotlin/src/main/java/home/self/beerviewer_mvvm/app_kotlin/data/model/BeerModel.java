@@ -7,6 +7,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.List;
 
@@ -58,6 +59,9 @@ public class BeerModel {
     @ColumnInfo(name = "contributed_by")
     String contributedBy;
 
+    @Ignore
+    SwipyRefreshLayoutDirection direction;
+
     public int getId() {
         return id;
     }
@@ -72,6 +76,14 @@ public class BeerModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setDirection(SwipyRefreshLayoutDirection direction) {
+        this.direction = direction;
+    }
+
+    public SwipyRefreshLayoutDirection getDirection() {
+        return direction;
     }
 
     public String getTagline() {

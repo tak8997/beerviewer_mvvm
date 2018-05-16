@@ -43,7 +43,7 @@ class SplashActivity : DaggerAppCompatActivity() {
                 .observeOn(schedulerProvider.ui())
                 .subscribe {it ->
                     if (it == false)
-                        startActivity<BeersViewActivity>()
+                        startActivity<BeersViewActivity>().apply { finish() }
                 })
 
         showSplashAnimation()

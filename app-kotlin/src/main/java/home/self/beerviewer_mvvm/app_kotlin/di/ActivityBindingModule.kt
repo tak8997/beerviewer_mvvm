@@ -3,6 +3,8 @@ package home.self.beerviewer_mvvm.app_kotlin.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import home.self.beerviewer_mvvm.app_kotlin.view.beerdetail.BeerDetailActivity
+import home.self.beerviewer_mvvm.app_kotlin.view.beerdetail.BeerDetailModule
 import home.self.beerviewer_mvvm.app_kotlin.view.beersview.BeersViewActivity
 import home.self.beerviewer_mvvm.app_kotlin.view.beersview.BeersViewModule
 import home.self.beerviewer_mvvm.app_kotlin.view.splash.SplashActivity
@@ -17,8 +19,6 @@ abstract class ActivityBindingModule {
     @ContributesAndroidInjector(modules = arrayOf(BeersViewModule::class))
     abstract fun beersViewActivity() : BeersViewActivity
 
-    //
-    //    @ContributesAndroidInjector(modules = BeerDetailModule.class)
-    //    @ActivityScope
-    //    abstract BeerDetailActivity beerDetailActivity();
+    @ContributesAndroidInjector(modules = arrayOf(BeerDetailModule::class))
+    abstract fun beerDetailActivity() : BeerDetailActivity
 }

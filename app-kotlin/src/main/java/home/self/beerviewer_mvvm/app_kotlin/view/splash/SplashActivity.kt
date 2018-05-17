@@ -31,8 +31,6 @@ class SplashActivity : DaggerAppCompatActivity() {
 
         lifecycle.addObserver(disposables)
 
-        disposables.add(viewModel.getBeers())
-
         disposables.add(viewModel.message
                 .observeOn(schedulerProvider.ui())
                 .subscribe {message ->
@@ -47,6 +45,11 @@ class SplashActivity : DaggerAppCompatActivity() {
                 })
 
         showSplashAnimation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disposables.add(viewModel.getBeers())
     }
 
     private fun showSplashAnimation() {

@@ -10,6 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import dagger.android.support.DaggerAppCompatActivity
 import home.self.beerviewer_mvvm.app_kotlin.R
+import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import kotlinx.android.synthetic.main.activity_beer_detail.*
 import org.jetbrains.anko.longToast
@@ -17,6 +18,10 @@ import javax.inject.Inject
 
 
 class BeerDetailActivity : DaggerAppCompatActivity() {
+
+    val disposables = AutoClearedDisposable(this)
+    val viewDisposables = AutoClearedDisposable(this, false)
+
 
     @Inject lateinit var viewModelFactory: BeerDetailViewModelFactory
     @Inject lateinit var schedulerProvider: BaseSchedulerProvider
@@ -31,7 +36,7 @@ class BeerDetailActivity : DaggerAppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory)[BeerDetailViewModel::class.java]
 
-        viewModel.beer
+        viewDisposables.add(viewModel.beer
                 .observeOn(schedulerProvider.ui())
                 .subscribe { beer ->
                     beerInfo = (beer.name + "\n" + beer.tagline + "\n" + beer.description + "\n"
@@ -48,23 +53,17 @@ class BeerDetailActivity : DaggerAppCompatActivity() {
                     beer_contributed_by.text = beer.contributedBy
                     beer_first_brewed.text = beer.firstBrewed
                     app_bar_title.text = beer.name
-                }
+                })
 
-        viewModel.message
+        viewDisposables.add(viewModel.message
                 .observeOn(schedulerProvider.ui())
-                .subscribe { msg -> longToast(msg) }
+                .subscribe { msg -> longToast(msg) })
 
-        viewModel.isLoading
+        viewDisposables.add(viewModel.isLoading
                 .observeOn(schedulerProvider.ui())
-                .subscribe { isLoading ->
-                    if (isLoading) {
+                .subscribe { isLoading -> })
 
-                    } else {
-
-                    }
-                }
-
-        viewModel.beerInfo
+        viewDisposables.add(viewModel.beerInfo
                 .observeOn(schedulerProvider.ui())
                 .subscribe { beerInfo ->
                     val intent = Intent()
@@ -72,9 +71,11 @@ class BeerDetailActivity : DaggerAppCompatActivity() {
                     intent.putExtra(Intent.EXTRA_TEXT, beerInfo)
                     intent.type = "text/plain"
                     startActivity(Intent.createChooser(intent, resources.getText(R.string.send_to)))
-                }
+                })
 
-        viewModel.getBeer()
+        disposables.add(viewModel.getBeer())
+
+        setSupportActionBar(app_bar)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

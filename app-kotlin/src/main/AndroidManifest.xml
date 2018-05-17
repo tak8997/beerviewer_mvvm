@@ -22,8 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.beersview.BeersViewActivity" />
-        <activity android:name=".view.beerdetail.BeerDetailActivity" />
+        <activity
+            android:name=".view.beersview.BeersViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".view.beerdetail.BeerDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

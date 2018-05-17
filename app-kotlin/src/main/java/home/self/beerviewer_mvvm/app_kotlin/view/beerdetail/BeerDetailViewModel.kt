@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 /**
@@ -22,8 +23,8 @@ class BeerDetailViewModel(val repository: BeerRepository,
 
     val beerInfo: BehaviorSubject<String> = BehaviorSubject.create()
 
-    fun getBeer() {
-        if (beerId != -1) {
+    fun getBeer(): Disposable {
+        return if (beerId != -1) {
             repository
                     .getBeer(beerId)
                     .doOnSubscribe { isLoading.onNext(true) }
@@ -32,6 +33,9 @@ class BeerDetailViewModel(val repository: BeerRepository,
                     .subscribe({ item ->
                         beer.onNext(item)
                     }) { message.onNext(it.message ?: "unexpected error") }
+        } else {
+            message.onNext("not found")
+            throw Throwable("not found")
         }
     }
 

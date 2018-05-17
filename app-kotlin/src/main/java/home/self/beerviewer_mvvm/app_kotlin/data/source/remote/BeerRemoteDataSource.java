@@ -1,6 +1,8 @@
 package home.self.beerviewer_mvvm.app_kotlin.data.source.remote;
 
 
+import android.util.Log;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,8 +12,6 @@ import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel;
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerDataSource;
 import home.self.beerviewer_mvvm.app_kotlin.network.BeerApiService;
 import io.reactivex.Flowable;
-import io.reactivex.Maybe;
-import io.reactivex.Single;
 
 @Singleton
 public class BeerRemoteDataSource implements BeerDataSource {
@@ -33,6 +33,7 @@ public class BeerRemoteDataSource implements BeerDataSource {
 
     @Override
     public Flowable<List<BeerModel>> getBeers(int pageStart, int perPage) {
+        Log.d("zxcv111", "a");
         return apiService.getBeers(pageStart, perPage);
     }
 

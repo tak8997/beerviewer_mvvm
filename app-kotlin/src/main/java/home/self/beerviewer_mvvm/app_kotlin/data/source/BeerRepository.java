@@ -1,7 +1,5 @@
 package home.self.beerviewer_mvvm.app_kotlin.data.source;
 
-import android.util.Log;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,9 +7,6 @@ import javax.inject.Singleton;
 
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel;
 import io.reactivex.Flowable;
-import io.reactivex.Maybe;
-import io.reactivex.Single;
-import io.reactivex.SingleSource;
 
 @Singleton
 public class BeerRepository implements BeerDataSource {
@@ -82,13 +77,15 @@ public class BeerRepository implements BeerDataSource {
     @Override
     public Flowable<List<BeerModel>> getBeers(int pageStart, int perPage) {
         return beerLocalDataSource.getBeers(pageStart, perPage)
-                .filter(beers-> !beers.isEmpty())
-                .switchMap(beerModels -> {
-                    if (beerModels.isEmpty())
+                .switchMap(beerModels -> {                                     //if local is empty, get from remote
+                    if (beerModels.isEmpty()) {
                         return getBeersFromRemote(pageStart, perPage);
+                    }
                     else
-                        return Flowable.just(beerModels).fromIterable(beerModels).toList().toFlowable();
-                });
+                        return Flowable.just(beerModels);
+                })
+                .firstElement()
+                .toFlowable();
     }
 
     private Flowable<List<BeerModel>> getBeersFromRemote(int pageStart, int perPage) {
@@ -99,6 +96,8 @@ public class BeerRepository implements BeerDataSource {
                         return true;
                     } else
                         return false;
-                });
+                })
+                .firstElement()
+                .toFlowable();
     }
 }

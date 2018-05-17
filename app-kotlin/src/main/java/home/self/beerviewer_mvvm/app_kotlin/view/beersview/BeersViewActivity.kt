@@ -47,16 +47,13 @@ class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefres
         lifecycle.addObserver(disposables)
         lifecycle.addObserver(viewDisposables)
 
-        getBeers(SwipyRefreshLayoutDirection.TOP)
-    }
-
-    private fun getBeers(direction: SwipyRefreshLayoutDirection) {
-        viewDisposables.add(viewModel.getBeers(pageStart++, perPage, direction)
-                .subscribeOn(schedulerProvider.io())
+        viewDisposables.add(viewModel.beers
                 .observeOn(schedulerProvider.ui())
-                .subscribe {beers ->
+                .subscribe { beers ->
                     beersAdapter.addItems(beers)
                 })
+
+        disposables.add(viewModel.getBeers(pageStart++, perPage, SwipyRefreshLayoutDirection.TOP))
     }
 
     private fun initView() {
@@ -77,7 +74,7 @@ class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefres
 
     override fun onRefresh(direction: SwipyRefreshLayoutDirection) {
         handler.postDelayed({
-//            getBeers(direction)
+            viewModel.getBeers(pageStart++, perPage, direction)
 
             refresh_layout.isRefreshing = false
         }, Constant.REFRESH_DELAY)

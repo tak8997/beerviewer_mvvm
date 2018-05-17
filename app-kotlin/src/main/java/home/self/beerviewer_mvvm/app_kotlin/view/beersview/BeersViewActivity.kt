@@ -53,6 +53,11 @@ class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefres
                     beersAdapter.addItems(beers)
                 })
 
+        viewDisposables.add(viewModel.getIndex()
+                .subscribe { index ->
+                    pageStart = index
+                })
+
         disposables.add(viewModel.getBeers(pageStart++, perPage, SwipyRefreshLayoutDirection.TOP))
     }
 

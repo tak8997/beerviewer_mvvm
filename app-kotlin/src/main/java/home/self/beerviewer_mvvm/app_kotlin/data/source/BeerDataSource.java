@@ -5,8 +5,6 @@ import java.util.List;
 
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel;
 import io.reactivex.Flowable;
-import io.reactivex.Maybe;
-import io.reactivex.Single;
 
 public interface BeerDataSource {
 
@@ -19,4 +17,6 @@ public interface BeerDataSource {
     Flowable<BeerModel> getBeer(int beerId);
 
     void saveBeer(BeerModel beer);
+
+    io.reactivex.Observable<Integer> getIndex();
 }

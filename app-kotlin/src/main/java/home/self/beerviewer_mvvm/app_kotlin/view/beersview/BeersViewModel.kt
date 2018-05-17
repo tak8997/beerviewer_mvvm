@@ -6,6 +6,7 @@ import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -29,7 +30,7 @@ class BeersViewModel(
                 beers.onNext(beerList)
             }
 
-
+    fun getIndex(): Observable<Int> = repository.getIndex()
 
 
 }

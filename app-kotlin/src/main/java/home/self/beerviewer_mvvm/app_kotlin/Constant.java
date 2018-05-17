@@ -6,5 +6,5 @@ public class Constant {
 
     public static final String DB_NAME = "beer_db";
     public static final String KEY_BEAR_ID = "bearId";
-    public static final long REFRESH_DELAY = 1000;
+    public static final long REFRESH_DELAY = 2000;
 }

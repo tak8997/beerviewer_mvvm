@@ -11,13 +11,13 @@ import home.self.beerviewer_mvvm.app_kotlin.rx.rxbus.Events;
 import home.self.beerviewer_mvvm.app_kotlin.rx.rxbus.RxEventBus;
 import home.self.beerviewer_mvvm.app_kotlin.util.IndexUtil;
 import io.reactivex.Flowable;
-import io.reactivex.Maybe;
-import io.reactivex.Single;
+import io.reactivex.subjects.BehaviorSubject;
 
 @Singleton
 public class BeerLocalDataSource implements BeerDataSource {
 
     private BeerDao beerDao;
+    private BehaviorSubject<Integer> index = BehaviorSubject.create();
 
     @Inject
     public BeerLocalDataSource(BeerDao beerDao) {
@@ -48,13 +48,16 @@ public class BeerLocalDataSource implements BeerDataSource {
     }
 
     @Override
+    public io.reactivex.Observable<Integer> getIndex() {
+        return index;
+    }
+
+    @Override
     public Flowable<List<BeerModel>> getBeers(int pageStart, int perPage) {
-        int indexStart;
-        if (pageStart == 10) {
-            indexStart = IndexUtil.getIndex(pageStart);
-            sendEventBus();
-        } else
-            indexStart = IndexUtil.getIndex(pageStart);
+        int indexStart = IndexUtil.getIndex(pageStart);
+
+        if (pageStart == 10)
+            index.onNext(1);
 
         return beerDao.getBeers(indexStart, perPage);
     }

@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package home.self.beerviewer_mvvm.app_kotlin.data.source;
+package home.self.beerviewer_mvvm.app_kotlin.di.qualifier
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import javax.inject.Qualifier;
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
+import javax.inject.Qualifier
 
 @Qualifier
-@Documented
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Remote {
-
-}
+internal annotation class App

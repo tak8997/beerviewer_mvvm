@@ -1,23 +1,28 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beersview
 
+import android.arch.lifecycle.ViewModel
+import com.mashup.dutchmarket.di.key.ViewModelKey
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
-import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
+import dagger.multibindings.IntoMap
 
 /**
  * Created by Tak on 2018. 5. 16..
  */
 
-@Module
-class BeersViewModule {
+@Module(includes = arrayOf(BeersViewModule.ProvideModule::class))
+internal interface BeersViewModule {
 
-    @Provides
-    fun provideViewModelFactory(beerRepository: BeerRepository,
-                                schedulerProvider: BaseSchedulerProvider) : BeersViewModelFactory
-            = BeersViewModelFactory(beerRepository, schedulerProvider)
+    @Module
+    class ProvideModule {
 
-    @Provides
-    fun provideBeersAdapter(activity: BeersViewActivity) : BeersAdapter
-            = BeersAdapter().apply { setOnItemClickListener(activity) }
+        @Provides
+        fun provideBeersAdapter(activity: BeersViewActivity) : BeersAdapter = BeersAdapter().apply { setOnItemClickListener(activity) }
+    }
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BeersViewModel.ViewModel::class)
+    fun bindBeersViewModel(beersViewModel: BeersViewModel.ViewModel): ViewModel
 }

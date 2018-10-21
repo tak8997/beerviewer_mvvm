@@ -1,19 +1,27 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.splash
 
+import android.arch.lifecycle.ViewModel
+import com.mashup.dutchmarket.di.ActivityScope
+import com.mashup.dutchmarket.di.key.ViewModelKey
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
-import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
+import dagger.multibindings.IntoMap
 
 /**
  * Created by Tak on 2018. 4. 19..
  */
 
-@Module
-class SplashModule {
+@Module(includes = arrayOf(SplashModule.ProvideModule::class))
+internal interface SplashModule {
 
-    @Provides
-    fun provideViewModelFactory(beerRepository: BeerRepository,
-                                schedulerProvider: BaseSchedulerProvider): SplashViewModelFactory
-        = SplashViewModelFactory(beerRepository, schedulerProvider)
+    @Module
+    class ProvideModule {
+
+    }
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplashViewModel.ViewModel::class)
+    fun bindSplashViewModel(splashViewModel: SplashViewModel.ViewModel): ViewModel
+
 }

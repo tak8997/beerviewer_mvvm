@@ -1,6 +1,5 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beerdetail
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -8,7 +7,7 @@ import android.view.MenuItem
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import dagger.android.support.DaggerAppCompatActivity
+import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
@@ -17,24 +16,21 @@ import org.jetbrains.anko.longToast
 import javax.inject.Inject
 
 
-class BeerDetailActivity : DaggerAppCompatActivity() {
+internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>() {
+
+    @Inject lateinit var schedulerProvider: BaseSchedulerProvider
+
+    private var beerInfo: String? = null
 
     val disposables = AutoClearedDisposable(this)
     val viewDisposables = AutoClearedDisposable(this, false)
 
+    override fun getLayoutRes(): Int = R.layout.activity_beer_detail
 
-    @Inject lateinit var viewModelFactory: BeerDetailViewModelFactory
-    @Inject lateinit var schedulerProvider: BaseSchedulerProvider
-
-    private lateinit var viewModel: BeerDetailViewModel
-
-    private var beerInfo: String? = null
+    override fun getViewModel(): Class<BeerDetailViewModel.ViewModel> = BeerDetailViewModel.ViewModel::class.java
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_beer_detail)
-
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[BeerDetailViewModel::class.java]
 
         viewDisposables.add(viewModel.beer
                 .observeOn(schedulerProvider.ui())

@@ -1,29 +1,29 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beerdetail
 
+import android.arch.lifecycle.ViewModel
+import com.mashup.dutchmarket.di.key.ViewModelKey
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.IntoMap
 import home.self.beerviewer_mvvm.app_kotlin.Constant
-import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
-import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 
 /**
  * Created by Tak on 2018. 5. 16..
  */
 
-@Module
-class BeerDetailModule {
+@Module(includes = arrayOf(BeerDetailModule.ProvideModule::class))
+internal interface BeerDetailModule {
 
-//    @Module
-//    companion object {
-//        @JvmStatic
+    @Module
+    class ProvideModule {
+
         @Provides
-        fun provideBeerId(beerDetailActivity: BeerDetailActivity) : Int
-                = beerDetailActivity.intent.getIntExtra(Constant.KEY_BEAR_ID, -1)
-//    }
+        fun provideBeerId(beerDetailActivity: BeerDetailActivity) : Int = beerDetailActivity.intent.getIntExtra(Constant.KEY_BEAR_ID, -1)
+    }
 
-    @Provides
-    fun provideViewModelFactory(beerRepository: BeerRepository,
-                                schedulerProvider: BaseSchedulerProvider,
-                                beerId: Int) : BeerDetailViewModelFactory
-        = BeerDetailViewModelFactory(beerRepository, schedulerProvider, beerId)
+    @Binds
+    @IntoMap
+    @ViewModelKey(BeerDetailViewModel.ViewModel::class)
+    fun bindBeerDetailViewModel(beerDetailViewModel: BeerDetailViewModel.ViewModel): ViewModel
 }

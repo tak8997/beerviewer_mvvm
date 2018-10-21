@@ -1,9 +1,8 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.splash
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import dagger.android.support.DaggerAppCompatActivity
+import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
@@ -13,21 +12,18 @@ import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
-class SplashActivity : DaggerAppCompatActivity() {
+internal class SplashActivity : BaseActivity<SplashViewModel.ViewModel>() {
+
+    @Inject lateinit var schedulerProvider: BaseSchedulerProvider
 
     private val disposables = AutoClearedDisposable(this)
 
-    @Inject lateinit var viewModelFactory : SplashViewModelFactory
-    @Inject lateinit var schedulerProvider: BaseSchedulerProvider
+    override fun getLayoutRes(): Int = R.layout.activity_splash
 
-    lateinit var viewModel : SplashViewModel
+    override fun getViewModel(): Class<SplashViewModel.ViewModel> = SplashViewModel.ViewModel::class.java
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
-
-        viewModel = ViewModelProviders.of(
-                this, viewModelFactory)[SplashViewModel::class.java]
 
         lifecycle.addObserver(disposables)
 

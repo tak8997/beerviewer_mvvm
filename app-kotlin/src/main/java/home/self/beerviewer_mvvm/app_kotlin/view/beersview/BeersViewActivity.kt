@@ -1,6 +1,5 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beersview
 
-import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -8,7 +7,7 @@ import android.os.Looper
 import android.support.v7.widget.LinearLayoutManager
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
-import dagger.android.support.DaggerAppCompatActivity
+import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
 import home.self.beerviewer_mvvm.app_kotlin.Constant
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
@@ -20,15 +19,12 @@ import kotlinx.android.synthetic.main.activity_beers_view.*
 import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
-class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefreshListener, BeersAdapter.ItemClickListener {
+internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), SwipyRefreshLayout.OnRefreshListener, BeersAdapter.ItemClickListener {
+
+    @Inject lateinit var beersAdapter: BeersAdapter
 
     val disposables = AutoClearedDisposable(this)
     val viewDisposables = AutoClearedDisposable(this, false)
-
-    @Inject lateinit var beersAdapter: BeersAdapter
-    @Inject lateinit var viewModelFactory : BeersViewModelFactory
-
-    lateinit var viewModel : BeersViewModel
 
     private val handler : Handler = Handler(Looper.getMainLooper())
     private val schedulerProvider : BaseSchedulerProvider = SchedulerProvider()
@@ -36,13 +32,15 @@ class BeersViewActivity : DaggerAppCompatActivity(), SwipyRefreshLayout.OnRefres
     private var pageStart = 1
     private var perPage = 25
 
+    override fun getLayoutRes(): Int = R.layout.activity_beers_view
+
+    override fun getViewModel(): Class<BeersViewModel.ViewModel> = BeersViewModel.ViewModel::class.java
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_beers_view)
 
         initView()
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[BeersViewModel::class.java]
 
         lifecycle.addObserver(disposables)
         lifecycle.addObserver(viewDisposables)

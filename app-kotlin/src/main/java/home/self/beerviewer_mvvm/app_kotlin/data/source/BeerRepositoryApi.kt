@@ -5,16 +5,15 @@ import io.reactivex.Observable
 
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 internal interface BeerRepositoryApi {
 
-    fun getBeers(): Flowable<List<BeerModel>>
-//
     fun getIndex(): Observable<Int>
 
     fun saveBeers(beers: List<BeerModel>)
 
-    fun getBeers(pageStart: Int, perPage: Int): Flowable<List<BeerModel>>
+    fun getBeers(pageStart: Int, perPage: Int): Single<List<BeerModel>>
 
     fun getBeer(beerId: Int): Flowable<BeerModel>
 

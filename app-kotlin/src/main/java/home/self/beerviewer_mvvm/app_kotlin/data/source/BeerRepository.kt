@@ -1,30 +1,43 @@
 package home.self.beerviewer_mvvm.app_kotlin.data.source
 
+import android.util.Log
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Local
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Remote
+import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class BeerRepository @Inject constructor(
-//        @field:Remote private val beerRemoteRepositoryApi: BeerRepositoryApi,
-//        @field:Local  private val beerLocalRepositoryApi: BeerRepositoryApi
+        @Remote private val remoteRepository: BeerRepositoryApi,
+                        val scheduler: BaseSchedulerProvider
 
 ) : BeerRepositoryApi {
+
+    companion object {
+        private val TAG = BeerRepository::class.java.simpleName
+    }
+
+    override fun getBeers(pageStart: Int, perPage: Int): Single<List<BeerModel>>
+            = remoteRepository
+            .getBeers(pageStart, perPage)
+            .subscribeOn(scheduler.io())
+            .observeOn(scheduler.ui())
+            .doAfterSuccess {
+                Log.d(TAG, "it must be saved")
+            }
+
+
     override fun getIndex(): Observable<Int> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getBeers(): Flowable<List<BeerModel>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun saveBeers(beers: List<BeerModel>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getBeers(pageStart: Int, perPage: Int): Flowable<List<BeerModel>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -126,8 +139,4 @@ internal class BeerRepository @Inject constructor(
 ////        return beerLocalRepositoryApi.index
 ////    }
 //
-//    companion object {
-//
-//        private val TAG = BeerRepository::class.java.simpleName
-//    }
 }

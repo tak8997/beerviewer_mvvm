@@ -18,7 +18,7 @@ internal abstract class BaseViewModel : ViewModel() {
 
     private val activityResultRelay = PublishRelay.create<Triple<Int, Int, Intent?>>()
 
-    private val compositeDisposable: CompositeDisposable by lazy {
+    protected val compositeDisposable: CompositeDisposable by lazy {
         CompositeDisposable()
     }
 

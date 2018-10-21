@@ -27,7 +27,6 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
     val viewDisposables = AutoClearedDisposable(this, false)
 
     private val handler : Handler = Handler(Looper.getMainLooper())
-    private val schedulerProvider : BaseSchedulerProvider = SchedulerProvider()
 
     private var pageStart = 1
     private var perPage = 25

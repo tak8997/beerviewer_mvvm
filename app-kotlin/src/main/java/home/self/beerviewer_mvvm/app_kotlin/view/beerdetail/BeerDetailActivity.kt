@@ -18,8 +18,6 @@ import javax.inject.Inject
 
 internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>() {
 
-    @Inject lateinit var schedulerProvider: BaseSchedulerProvider
-
     private var beerInfo: String? = null
 
     val disposables = AutoClearedDisposable(this)

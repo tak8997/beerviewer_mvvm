@@ -4,6 +4,8 @@ import android.arch.lifecycle.ViewModel
 import home.self.beerviewer_mvvm.app_kotlin.BaseViewModel
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
+import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
+import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
@@ -16,9 +18,9 @@ import javax.inject.Inject
 internal interface BeerDetailViewModel {
 
     class ViewModel @Inject constructor(
-            val repository: BeerRepository,
-            val schedulerProvider: BaseSchedulerProvider,
-            val beerId : Int) : BaseViewModel() {
+            @App val repository: BeerRepositoryApi,
+                 val schedulerProvider: BaseSchedulerProvider,
+                 val beerId : Int) : BaseViewModel() {
 
         val isLoading: BehaviorSubject<Boolean> = BehaviorSubject.create()
 

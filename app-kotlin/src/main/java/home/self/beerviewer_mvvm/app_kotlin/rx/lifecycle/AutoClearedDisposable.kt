@@ -8,11 +8,12 @@ import android.support.v7.app.AppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-class AutoClearedDisposable(
+internal class AutoClearedDisposable (
         private val lifeycycleOwner : AppCompatActivity,
         private val clearOnStop : Boolean = true,
-        private val compositeDisposable: CompositeDisposable = CompositeDisposable())
-    : LifecycleObserver {
+        private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
+) : LifecycleObserver {
 
     fun add(disposable: Disposable) {
         check(lifeycycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.INITIALIZED))

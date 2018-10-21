@@ -10,6 +10,7 @@ import home.self.beerviewer_mvvm.app_kotlin.rx.rxbus.RxEventBus
 import home.self.beerviewer_mvvm.app_kotlin.util.IndexUtil
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
 
 @Singleton
 internal class BeerLocalDataSource @Inject constructor(private val beerDao: BeerDao) : BeerRepositoryApi {
@@ -17,9 +18,6 @@ internal class BeerLocalDataSource @Inject constructor(private val beerDao: Beer
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getBeers(): Flowable<List<BeerModel>> {
-        return Flowable.just(mutableListOf())
-    }
 
 //    override val index = BehaviorSubject.create<Int>()
 
@@ -46,13 +44,13 @@ internal class BeerLocalDataSource @Inject constructor(private val beerDao: Beer
 //        return index
 //    }
 
-    override fun getBeers(pageStart: Int, perPage: Int): Flowable<List<BeerModel>> {
+    override fun getBeers(pageStart: Int, perPage: Int): Single<List<BeerModel>> {
         val indexStart = IndexUtil.getIndex(pageStart)
 
 //        if(pageStart == 10)
 //            index.onNext(1)
 
-        return beerDao.getBeers(indexStart, perPage)
+        return Single.just(mutableListOf())
     }
 
     override fun getBeer(beerId: Int): Flowable<BeerModel> {

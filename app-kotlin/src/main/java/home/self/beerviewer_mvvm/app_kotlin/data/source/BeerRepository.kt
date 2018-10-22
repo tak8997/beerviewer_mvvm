@@ -7,7 +7,6 @@ import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Remote
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,7 +14,8 @@ import javax.inject.Singleton
 @Singleton
 internal class BeerRepository @Inject constructor(
         @Remote private val remoteRepository: BeerRepositoryApi,
-                        val scheduler: BaseSchedulerProvider
+        @Local  private val localRepository: BeerRepositoryApi,
+                private val scheduler: BaseSchedulerProvider
 
 ) : BeerRepositoryApi {
 
@@ -23,13 +23,28 @@ internal class BeerRepository @Inject constructor(
         private val TAG = BeerRepository::class.java.simpleName
     }
 
-    override fun getBeers(pageStart: Int, perPage: Int): Single<List<BeerModel>>
+    override fun fetchBeers(pageStart: Int, perPage: Int): Flowable<List<BeerModel>>
+            = localRepository
+            .fetchBeers(pageStart, perPage)
+            .subscribeOn(scheduler.io())
+            .observeOn(scheduler.ui())
+            .map { it ->
+                if(it.isEmpty()) {
+                    Log.d(TAG, "from_remote")
+                    fetchBeersFromRemote(pageStart, perPage)
+                }
+
+                it
+            }
+
+    override fun fetchBeersFromRemote(pageStart: Int, perPage: Int): Single<List<BeerModel>>
             = remoteRepository
-            .getBeers(pageStart, perPage)
+            .fetchBeersFromRemote(pageStart, perPage)
             .subscribeOn(scheduler.io())
             .observeOn(scheduler.ui())
             .doAfterSuccess {
                 Log.d(TAG, "it must be saved")
+                localRepository.saveBeers(it)
             }
 
 
@@ -37,9 +52,7 @@ internal class BeerRepository @Inject constructor(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun saveBeers(beers: List<BeerModel>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun saveBeers(beers: List<BeerModel>) { }
 
     override fun getBeer(beerId: Int): Flowable<BeerModel> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

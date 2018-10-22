@@ -22,11 +22,18 @@ internal abstract class BaseViewModel : ViewModel() {
         CompositeDisposable()
     }
 
+    override fun onCleared() {
+        compositeDisposable.dispose()
+
+        super.onCleared()
+    }
+
     @CallSuper
     fun intent(intent: Intent) {
         intentRelay.accept(intent)
     }
 
+    @CheckResult
     fun intent(): Observable<Intent> = intentRelay
 
     fun onActivityResult(requestCode: RequestCode, resultCode: ResultCode, data: Intent?) {
@@ -36,12 +43,7 @@ internal abstract class BaseViewModel : ViewModel() {
     @CheckResult
     fun activityResult(): Observable<Triple<RequestCode, ResultCode, Intent?>> = activityResultRelay
 
-    override fun onCleared() {
-        compositeDisposable.dispose()
 
-//        Timber.d("#onCleared")
-        super.onCleared()
-    }
 
     fun addDisposables(vararg disposables: Disposable) {
         compositeDisposable.addAll(*disposables)

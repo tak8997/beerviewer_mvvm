@@ -1,28 +1,25 @@
 package home.self.beerviewer_mvvm.app_kotlin.data.source.local
 
-import javax.inject.Inject
-import javax.inject.Singleton
-
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
-import home.self.beerviewer_mvvm.app_kotlin.rx.rxbus.Events
-import home.self.beerviewer_mvvm.app_kotlin.rx.rxbus.RxEventBus
 import home.self.beerviewer_mvvm.app_kotlin.util.IndexUtil
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
-internal class BeerLocalDataSource @Inject constructor(private val beerDao: BeerDao) : BeerRepositoryApi {
+internal class BeerLocalDataSource @Inject constructor(
+        private val beerDao: BeerDao
+
+) : BeerRepositoryApi {
+
+    private val index = BehaviorSubject.create<Int>()
+
     override fun getIndex(): Observable<Int> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-
-//    override val index = BehaviorSubject.create<Int>()
-
-    private fun sendEventBus() {
-        RxEventBus.getInstance().post(Events.PageEvent())
     }
 
     override fun saveBeers(beers: List<BeerModel>) {
@@ -44,19 +41,24 @@ internal class BeerLocalDataSource @Inject constructor(private val beerDao: Beer
 //        return index
 //    }
 
-    override fun getBeers(pageStart: Int, perPage: Int): Single<List<BeerModel>> {
-        val indexStart = IndexUtil.getIndex(pageStart)
+    override fun fetchBeersFromRemote(pageStart: Int, perPage: Int): Single<List<BeerModel>> = Single.just(mutableListOf())
 
-//        if(pageStart == 10)
-//            index.onNext(1)
+    override fun fetchBeers(pageStart: Int, perPage: Int): Flowable<List<BeerModel>> {
+        val indexStart: Int
 
-        return Single.just(mutableListOf())
+        if(pageStart == 10) {
+            indexStart = IndexUtil.getIndex(pageStart)
+
+            index.onNext(1)
+        } else
+            indexStart = IndexUtil.getIndex(pageStart)
+
+        return beerDao.getBeers(indexStart, perPage)
     }
 
     override fun getBeer(beerId: Int): Flowable<BeerModel> {
         return beerDao.getBeer(beerId)
     }
-
 
 }
 

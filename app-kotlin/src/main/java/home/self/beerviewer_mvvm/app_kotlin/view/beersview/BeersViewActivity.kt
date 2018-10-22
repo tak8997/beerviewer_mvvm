@@ -8,12 +8,12 @@ import android.support.v7.widget.LinearLayoutManager
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
-import home.self.beerviewer_mvvm.app_kotlin.Constant
+import home.self.beerviewer_mvvm.app_kotlin.Constants
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
+import home.self.beerviewer_mvvm.app_kotlin.extensions.observe
+import home.self.beerviewer_mvvm.app_kotlin.extensions.showDialogFragment
 import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
-import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
-import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.SchedulerProvider
 import home.self.beerviewer_mvvm.app_kotlin.view.beerdetail.BeerDetailActivity
 import kotlinx.android.synthetic.main.activity_beers_view.*
 import org.jetbrains.anko.startActivity
@@ -28,7 +28,7 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
 
     private val handler : Handler = Handler(Looper.getMainLooper())
 
-    private var pageStart = 1
+    private var pageStart = 2
     private var perPage = 25
 
     override fun getLayoutRes(): Int = R.layout.activity_beers_view
@@ -38,27 +38,41 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initView()
+        subscribeLooknFeel()
+
+        initializeViews()
 
 
-        lifecycle.addObserver(disposables)
-        lifecycle.addObserver(viewDisposables)
-
-        viewDisposables.add(viewModel.beers
-                .observeOn(schedulerProvider.ui())
-                .subscribe { beers ->
-                    beersAdapter.addItems(beers)
-                })
-
-        viewDisposables.add(viewModel.getIndex()
-                .subscribe { index ->
-                    pageStart = index
-                })
-
-        disposables.add(viewModel.getBeers(pageStart++, perPage, SwipyRefreshLayoutDirection.TOP))
+//        lifecycle.addObserver(disposables)
+//        lifecycle.addObserver(viewDisposables)
+//
+//        viewDisposables.add(viewModel.beers
+//                .observeOn(schedulerProvider.ui())
+//                .subscribe { beers ->
+//                    beersAdapter.addItems(beers)
+//                })
+//
+//        viewDisposables.add(viewModel.getIndex()
+//                .subscribe { index ->
+//                    pageStart = index
+//                })
+//
+//        disposables.add(viewModel.getBeers(pageStart++, perPage, SwipyRefreshLayoutDirection.TOP))
     }
 
-    private fun initView() {
+    private fun subscribeLooknFeel() {
+        observe(viewModel.outpus.isLoading(), ::handleIsLoading)
+    }
+
+    private fun handleIsLoading(isLoading: Boolean) {
+        if(isLoading) {
+            showLoadingDialog()
+        } else {
+            hideLoadingDialog()
+        }
+    }
+
+    private fun initializeViews() {
         setSupportActionBar(app_bar)
 
         with(beer_recyler) {
@@ -71,14 +85,14 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
     }
 
     override fun onItemClick(beer: BeerModel) {
-        startActivity<BeerDetailActivity>(Constant.KEY_BEAR_ID to beer.id)
+        startActivity<BeerDetailActivity>(Constants.KEY_BEAR_ID to beer.id)
     }
 
     override fun onRefresh(direction: SwipyRefreshLayoutDirection) {
         handler.postDelayed({
-            viewModel.getBeers(pageStart++, perPage, direction)
+            viewModel.outpus.fetchBeers(pageStart++, perPage, direction)
 
             refresh_layout.isRefreshing = false
-        }, Constant.REFRESH_DELAY)
+        }, Constants.REFRESH_DELAY)
     }
 }

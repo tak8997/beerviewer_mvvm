@@ -6,7 +6,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import home.self.beerviewer_mvvm.app_kotlin.Constant
+import home.self.beerviewer_mvvm.app_kotlin.Constants
 
 /**
  * Created by Tak on 2018. 5. 16..
@@ -19,7 +19,7 @@ internal interface BeerDetailModule {
     class ProvideModule {
 
         @Provides
-        fun provideBeerId(beerDetailActivity: BeerDetailActivity) : Int = beerDetailActivity.intent.getIntExtra(Constant.KEY_BEAR_ID, -1)
+        fun provideBeerId(beerDetailActivity: BeerDetailActivity) : Int = beerDetailActivity.intent.getIntExtra(Constants.KEY_BEAR_ID, -1)
     }
 
     @Binds

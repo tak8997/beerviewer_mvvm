@@ -25,8 +25,9 @@ import javax.inject.Singleton
         AndroidInjectionModule::class,
         AndroidSupportInjectionModule::class,
         ActivityBindingModule::class,
-        ApplicationRepositoryModule::class,
-        ApplicationModule::class)
+        ApplicationModule::class,
+        ApplicationRepositoryModule::class
+)
 )
 internal interface ApplicationComponent : AndroidInjector<BeerViewerApplication> {
 

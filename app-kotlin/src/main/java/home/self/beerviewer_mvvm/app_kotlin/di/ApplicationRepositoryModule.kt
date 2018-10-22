@@ -5,14 +5,10 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import dagger.Module
 import dagger.Provides
-import home.self.beerviewer_mvvm.app_kotlin.Constant
-import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
-import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Local
-import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Remote
+import home.self.beerviewer_mvvm.app_kotlin.Constants
 import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerDao
 import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerDatabase
-import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerLocalDataSource
-import home.self.beerviewer_mvvm.app_kotlin.data.source.remote.BeerRemoteDataSource
+import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
 import home.self.beerviewer_mvvm.app_kotlin.network.BeerApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -46,11 +42,12 @@ internal interface ApplicationRepositoryModule {
         @Provides
         fun retrofit(okHttpClient: OkHttpClient): Retrofit {
             return Retrofit.Builder()
-                    .baseUrl(Constant.BASE_URL)
+                    .baseUrl(Constants.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(okHttpClient)
                     .build()
+
         }
 
         @Singleton
@@ -65,7 +62,7 @@ internal interface ApplicationRepositoryModule {
             return Room.databaseBuilder(
                     context,
                     BeerDatabase::class.java,
-                    Constant.DB_NAME)
+                    Constants.DB_NAME)
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
                     .build()
@@ -76,7 +73,6 @@ internal interface ApplicationRepositoryModule {
         fun provideBeerDao(beerDatabase: BeerDatabase): BeerDao {
             return beerDatabase.beerDao()
         }
-
 
     }
 

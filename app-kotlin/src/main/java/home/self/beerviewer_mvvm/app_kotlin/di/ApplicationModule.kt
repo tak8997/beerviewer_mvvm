@@ -7,10 +7,13 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import home.self.beerviewer_mvvm.app_kotlin.BaseViewModelFactory
+import home.self.beerviewer_mvvm.app_kotlin.BeerViewerApplication
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
+import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerLocalDataSource
 import home.self.beerviewer_mvvm.app_kotlin.data.source.remote.BeerRemoteDataSource
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
+import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Local
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Remote
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.SchedulerProvider
@@ -24,19 +27,12 @@ internal interface ApplicationModule {
 
         @Singleton
         @Provides
-        fun provideContext(application: Application): Context = application
+        fun provideApplicationContext(): Application = BeerViewerApplication.instance
 
         @Provides
         @Singleton
         fun provideSchedulerProvider(): BaseSchedulerProvider = SchedulerProvider()
     }
-//
-//    @Singleton
-//    @Local
-//    @Provides
-//    fun provideBeerLocalDataSource(beerDao: BeerDao): BeerRepositoryApi {
-//        return BeerLocalDataSource(beerDao)
-//    }
 
     @Singleton
     @App
@@ -47,6 +43,11 @@ internal interface ApplicationModule {
     @Remote
     @Binds
     fun bindsBeerRemoteDataSource(beerRemoteRepository: BeerRemoteDataSource): BeerRepositoryApi
+
+    @Singleton
+    @Local
+    @Binds
+    fun bindsBeerLocalDataSource(beerLocalRepository: BeerLocalDataSource): BeerRepositoryApi
 
     @Binds
     fun bindsViewModelFactory(viewModelFactory: BaseViewModelFactory): ViewModelProvider.Factory

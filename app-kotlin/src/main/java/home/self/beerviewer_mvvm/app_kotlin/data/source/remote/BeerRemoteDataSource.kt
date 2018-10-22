@@ -25,8 +25,9 @@ internal class BeerRemoteDataSource @Inject constructor(
 //    override fun getBeers(): Flowable<List<BeerModel>> {
 //        return apiService.beers
 //    }
+    override fun fetchBeers(pageStart: Int, perPage: Int): Flowable<List<BeerModel>> = Flowable.just(mutableListOf())
 
-    override fun getBeers(pageStart: Int, perPage: Int): Single<List<BeerModel>>
+    override fun fetchBeersFromRemote(pageStart: Int, perPage: Int): Single<List<BeerModel>>
             = apiService.getBeers(pageStart, perPage)
 
 

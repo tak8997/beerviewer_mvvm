@@ -45,7 +45,6 @@ internal interface BeersViewModel {
 
         override fun fetchBeers(): MutableLiveData<List<BeerModel>> = beers
 
-
         override fun fetchBeers(pageStart: Int, perPage: Int, direction: SwipyRefreshLayoutDirection): Disposable
                 = repository
                 .fetchBeers(pageStart, perPage)

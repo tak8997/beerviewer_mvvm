@@ -62,6 +62,13 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
 
     private fun subscribeLooknFeel() {
         observe(viewModel.outpus.isLoading(), ::handleIsLoading)
+        observe(viewModel.outpus.fetchBeers(), ::handleFetchBeers)
+    }
+
+    private fun handleFetchBeers(beers: List<BeerModel>?) {
+        beers?.let {
+            beersAdapter.addItems(it)
+        }
     }
 
     private fun handleIsLoading(isLoading: Boolean) {

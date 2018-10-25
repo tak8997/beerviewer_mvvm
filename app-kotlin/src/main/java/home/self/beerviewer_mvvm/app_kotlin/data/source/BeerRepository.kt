@@ -28,13 +28,13 @@ internal class BeerRepository @Inject constructor(
             .fetchBeers(pageStart, perPage)
             .subscribeOn(scheduler.io())
             .observeOn(scheduler.ui())
-            .map { it ->
+            .switchMap { it ->
                 if(it.isEmpty()) {
                     Log.d(TAG, "from_remote")
-                    fetchBeersFromRemote(pageStart, perPage)
+                    return@switchMap fetchBeersFromRemote(pageStart, perPage).toFlowable()
                 }
 
-                it
+                return@switchMap Flowable.just(it)
             }
 
     override fun fetchBeersFromRemote(pageStart: Int, perPage: Int): Single<List<BeerModel>>

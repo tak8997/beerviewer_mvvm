@@ -16,10 +16,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5e8ae5b-b291-471f-a381-69c9869f5037" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/data/source/BeerRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/data/source/BeerRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beersview/BeersViewActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beersview/BeersViewActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beersview/BeersViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beersview/BeersViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-kotlin/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app-kotlin/build.gradle" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -41,17 +40,26 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.51818806">
+    <splitter split-orientation="horizontal" split-proportion="0.47929823">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="BeerRepository.kt" pinned="false" current-in-tab="true">
+          <file leaf-file-name="BeerRepository.kt" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/data/source/BeerRepository.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="576">
-                  <caret line="36" column="41" lean-forward="true" selection-start-line="36" selection-start-column="41" selection-end-line="36" selection-end-column="41" />
+                <state relative-caret-position="282">
+                  <caret line="46" column="36" selection-start-line="46" selection-start-column="36" selection-end-line="46" selection-end-column="36" />
                   <folding>
                     <element signature="e#58#497#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/app-kotlin/build.gradle">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="193">
+                  <caret line="90" column="61" selection-start-line="90" selection-start-column="61" selection-end-line="90" selection-end-column="61" />
                 </state>
               </provider>
             </entry>
@@ -90,7 +98,7 @@
           <file leaf-file-name="BeersViewModel.kt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beersview/BeersViewModel.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="394">
+                <state relative-caret-position="440">
                   <caret line="49" selection-start-line="49" selection-end-line="49" />
                   <folding>
                     <element signature="e#61#724#0" expanded="true" />
@@ -103,7 +111,7 @@
             <entry file="file://$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/splash/SplashViewModel.kt">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="480">
-                  <caret line="50" column="5" lean-forward="true" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
+                  <caret line="50" column="5" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
                 </state>
               </provider>
             </entry>
@@ -3729,7 +3737,6 @@
         <option value="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/extensions/LifecycleOwnerExtensions.kt" />
         <option value="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/network/BeerApiService.java" />
         <option value="$PROJECT_DIR$/app-kotlin/src/main/res/layout/fragment_loading_dialog.xml" />
-        <option value="$PROJECT_DIR$/app-kotlin/build.gradle" />
         <option value="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beerdetail/BeerDetailActivity.kt" />
         <option value="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beerdetail/BeerDetailViewModel.kt" />
         <option value="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/data/source/BeerRepositoryApi.kt" />
@@ -3747,6 +3754,7 @@
         <option value="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beersview/BeersViewModel.kt" />
         <option value="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beersview/BeersViewActivity.kt" />
         <option value="$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/data/source/BeerRepository.kt" />
+        <option value="$PROJECT_DIR$/app-kotlin/build.gradle" />
       </list>
     </option>
   </component>
@@ -4070,7 +4078,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1676" height="1027" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -4087,12 +4094,12 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12790698" />
-      <window_info anchor="bottom" id="Build" order="7" weight="0.38064516" />
+      <window_info anchor="bottom" id="Build" order="7" visible="true" weight="0.38064516" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.2956989" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.2956989" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Preview" order="6" />
@@ -4502,16 +4509,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/data/source/BeerRepositoryApi.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
-          <folding>
-            <element signature="e#59#210#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/home/self/beerviewer_mvvm/view/splash/SplashActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-165">
@@ -4536,20 +4533,13 @@
     <entry file="file://$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/splash/SplashViewModel.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
-          <caret line="50" column="5" lean-forward="true" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app-kotlin/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="75" column="55" selection-start-line="75" selection-start-column="55" selection-end-line="75" selection-end-column="55" />
+          <caret line="50" column="5" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/view/beersview/BeersViewModel.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
+        <state relative-caret-position="440">
           <caret line="49" selection-start-line="49" selection-end-line="49" />
           <folding>
             <element signature="e#61#724#0" expanded="true" />
@@ -4557,13 +4547,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/data/source/BeerRepositoryApi.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+          <folding>
+            <element signature="e#59#210#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app-kotlin/src/main/java/home/self/beerviewer_mvvm/app_kotlin/data/source/BeerRepository.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="576">
-          <caret line="36" column="41" lean-forward="true" selection-start-line="36" selection-start-column="41" selection-end-line="36" selection-end-column="41" />
+        <state relative-caret-position="282">
+          <caret line="46" column="36" selection-start-line="46" selection-start-column="36" selection-end-line="46" selection-end-column="36" />
           <folding>
             <element signature="e#58#497#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app-kotlin/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="90" column="61" selection-start-line="90" selection-start-column="61" selection-end-line="90" selection-end-column="61" />
         </state>
       </provider>
     </entry>

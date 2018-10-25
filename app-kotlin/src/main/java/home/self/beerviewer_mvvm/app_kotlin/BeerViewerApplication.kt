@@ -2,6 +2,7 @@ package home.self.beerviewer_mvvm.app_kotlin
 
 import android.app.Activity
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -24,6 +25,7 @@ internal class BeerViewerApplication : Application(), HasActivityInjector {
         instance = this
 
         initializeDagger()
+        initializeStetho()
         initializeMemoryLeakDetector()
     }
 
@@ -34,6 +36,10 @@ internal class BeerViewerApplication : Application(), HasActivityInjector {
                 .builder()
                 .create(this)
                 .inject(this)
+    }
+
+    private fun initializeStetho() {
+        Stetho.initializeWithDefaults(this)
     }
 
     private fun initializeMemoryLeakDetector() {

@@ -3,6 +3,7 @@ package home.self.beerviewer_mvvm.app_kotlin.di
 
 import android.app.Application
 import android.arch.persistence.room.Room
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
 import home.self.beerviewer_mvvm.app_kotlin.Constants
@@ -35,6 +36,7 @@ internal interface ApplicationRepositoryModule {
                     .writeTimeout(20, TimeUnit.SECONDS)
                     .readTimeout(20, TimeUnit.SECONDS)
                     .addInterceptor(loggingInterceptor)
+                    .addNetworkInterceptor(StethoInterceptor())
                     .build()
         }
 

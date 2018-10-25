@@ -20,12 +20,12 @@ internal class SplashActivity : BaseActivity<SplashViewModel.ViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        subscribeLooknFeel()
+        subscribe()
 
         showSplashAnimation()
     }
 
-    private fun subscribeLooknFeel() {
+    private fun subscribe() {
         observe(viewModel.outputs.errorMessage(), ::handleMessage)
         observe(viewModel.outputs.isSplashLoadingEnd(), ::handleSplashLoading)
     }

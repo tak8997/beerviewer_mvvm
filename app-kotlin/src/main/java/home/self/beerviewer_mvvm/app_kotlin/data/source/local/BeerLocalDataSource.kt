@@ -18,7 +18,7 @@ internal class BeerLocalDataSource @Inject constructor(
 
     private val index = BehaviorSubject.create<Int>()
 
-    override fun getIndex(): Observable<Int> {
+    override fun getIndex(): Single<Int> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

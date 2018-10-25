@@ -8,7 +8,7 @@ import io.reactivex.Single
 
 internal interface BeerRepositoryApi {
 
-    fun getIndex(): Observable<Int>
+    fun getIndex(): Single<Int>
 
     fun saveBeers(beers: List<BeerModel>)
 

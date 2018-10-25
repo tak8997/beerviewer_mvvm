@@ -1,7 +1,6 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beersview
 
 import android.arch.lifecycle.MutableLiveData
-import android.support.annotation.CheckResult
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import home.self.beerviewer_mvvm.app_kotlin.BaseViewModel
 import home.self.beerviewer_mvvm.app_kotlin.Constants
@@ -9,7 +8,6 @@ import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
@@ -22,6 +20,7 @@ internal interface BeersViewModel {
 
     interface Outputs {
         fun fetchBeers(): MutableLiveData<List<BeerModel>>
+        fun fetchIndex(): MutableLiveData<Int>
         fun isLoading(): MutableLiveData<Boolean>
     }
 
@@ -35,15 +34,16 @@ internal interface BeersViewModel {
 
         private val beers = MutableLiveData<List<BeerModel>>()
         private val isLoading = MutableLiveData<Boolean>()
+        private val index = MutableLiveData<Int>()
 
         init {
             intent().map { it.getSerializableExtra(Constants.EXTRA_DEFAULT_PAGE) as Pair<Int, Int> }
                     .subscribeBy { it ->
                         fetchBeers(it.first, it.second, SwipyRefreshLayoutDirection.TOP)
                     }
-        }
 
-        override fun fetchBeers(): MutableLiveData<List<BeerModel>> = beers
+            subscribeIndex()
+        }
 
         override fun fetchBeers(pageStart: Int, perPage: Int, direction: SwipyRefreshLayoutDirection): Disposable
                 = repository
@@ -60,9 +60,18 @@ internal interface BeersViewModel {
                     beers.postValue(beerList)
                 }
 
+        override fun fetchBeers(): MutableLiveData<List<BeerModel>> = beers
+
+        override fun fetchIndex(): MutableLiveData<Int> = index
+
         override fun isLoading(): MutableLiveData<Boolean> = isLoading
 
-        fun getIndex(): Observable<Int> = repository.getIndex()
+        private fun subscribeIndex()
+                = repository
+                .getIndex()
+                .subscribe { it ->
+                    index.postValue(it)
+                }
     }
 
 }

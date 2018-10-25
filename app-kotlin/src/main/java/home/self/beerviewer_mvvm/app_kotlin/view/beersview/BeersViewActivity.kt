@@ -12,8 +12,6 @@ import home.self.beerviewer_mvvm.app_kotlin.Constants
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.extensions.observe
-import home.self.beerviewer_mvvm.app_kotlin.extensions.showDialogFragment
-import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
 import home.self.beerviewer_mvvm.app_kotlin.view.beerdetail.BeerDetailActivity
 import kotlinx.android.synthetic.main.activity_beers_view.*
 import org.jetbrains.anko.startActivity
@@ -22,9 +20,6 @@ import javax.inject.Inject
 internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), SwipyRefreshLayout.OnRefreshListener, BeersAdapter.ItemClickListener {
 
     @Inject lateinit var beersAdapter: BeersAdapter
-
-    val disposables = AutoClearedDisposable(this)
-    val viewDisposables = AutoClearedDisposable(this, false)
 
     private val handler : Handler = Handler(Looper.getMainLooper())
 
@@ -38,31 +33,15 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        subscribeLooknFeel()
+        subscribe()
 
         initializeViews()
-
-
-//        lifecycle.addObserver(disposables)
-//        lifecycle.addObserver(viewDisposables)
-//
-//        viewDisposables.add(viewModel.beers
-//                .observeOn(schedulerProvider.ui())
-//                .subscribe { beers ->
-//                    beersAdapter.addItems(beers)
-//                })
-//
-//        viewDisposables.add(viewModel.getIndex()
-//                .subscribe { index ->
-//                    pageStart = index
-//                })
-//
-//        disposables.add(viewModel.getBeers(pageStart++, perPage, SwipyRefreshLayoutDirection.TOP))
     }
 
-    private fun subscribeLooknFeel() {
+    private fun subscribe() {
         observe(viewModel.outpus.isLoading(), ::handleIsLoading)
         observe(viewModel.outpus.fetchBeers(), ::handleFetchBeers)
+        observe(viewModel.outpus.fetchIndex(), ::handleIndex)
     }
 
     private fun handleFetchBeers(beers: List<BeerModel>?) {
@@ -77,6 +56,10 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
         } else {
             hideLoadingDialog()
         }
+    }
+
+    private fun handleIndex(index: Int) {
+        pageStart = index
     }
 
     private fun initializeViews() {

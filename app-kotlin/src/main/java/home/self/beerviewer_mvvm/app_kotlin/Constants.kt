@@ -1,5 +1,9 @@
 package home.self.beerviewer_mvvm.app_kotlin
 
+enum class Parameter {
+    CLICK, NULL, SUCCESS, EVENT
+}
+
 object Constants {
 
     val BASE_URL = "http://api.punkapi.com/v2/"

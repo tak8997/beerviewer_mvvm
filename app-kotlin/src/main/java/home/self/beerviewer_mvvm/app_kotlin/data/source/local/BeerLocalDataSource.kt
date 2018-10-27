@@ -4,6 +4,7 @@ import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.util.IndexUtil
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
@@ -45,9 +46,7 @@ internal class BeerLocalDataSource @Inject constructor(
 
     override fun fetchBeerFromRemote(beerId: Int): Single<BeerModel> = Single.just(BeerModel())
 
-    override fun getIndex(): Single<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getIndex(): Observable<Int> = index
 }
 
 

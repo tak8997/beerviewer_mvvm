@@ -16,28 +16,18 @@ internal class BeerRemoteDataSource @Inject constructor(
 
 ) : BeerRepositoryApi {
 
-    override fun getIndex(): Single<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun saveBeers(beers: List<BeerModel>) {}
-
-//    override fun getBeers(): Flowable<List<BeerModel>> {
-//        return apiService.beers
-//    }
     override fun fetchBeers(pageStart: Int, perPage: Int): Flowable<List<BeerModel>> = Flowable.just(mutableListOf())
 
-    override fun fetchBeersFromRemote(pageStart: Int, perPage: Int): Single<List<BeerModel>>
-            = apiService.getBeers(pageStart, perPage)
+    override fun fetchBeersFromRemote(pageStart: Int, perPage: Int): Single<List<BeerModel>> = apiService.fetchBeers(pageStart, perPage)
 
+    override fun fetchBeer(beerId: Int): Flowable<BeerModel> = Flowable.just(BeerModel())
 
-    override fun getBeer(beerId: Int): Flowable<BeerModel> {
-        return apiService.getBeer(beerId).toFlowable()
-    }
+    override fun fetchBeerFromRemote(beerId: Int): Single<BeerModel> = apiService.fetchBeer(beerId)
 
     override fun saveBeer(beer: BeerModel) {}
 
-//    override fun getIndex(): Observable<Int>? {
-//        return null
-//    }
+    override fun getIndex(): Observable<Int> = Observable.just(1)
+
+    override fun saveBeers(beers: List<BeerModel>) {}
+
 }

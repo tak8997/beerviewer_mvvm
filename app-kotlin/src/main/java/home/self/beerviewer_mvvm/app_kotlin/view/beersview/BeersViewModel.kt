@@ -8,8 +8,11 @@ import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
 import io.reactivex.Flowable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 internal interface BeersViewModel {
@@ -38,6 +41,7 @@ internal interface BeersViewModel {
 
         init {
             intent().map { it.getSerializableExtra(Constants.EXTRA_DEFAULT_PAGE) as Pair<Int, Int> }
+                    .doOnNext { isLoading.postValue(true) }
                     .subscribeBy { it ->
                         fetchBeers(it.first, it.second, SwipyRefreshLayoutDirection.TOP)
                     }
@@ -48,8 +52,7 @@ internal interface BeersViewModel {
         override fun fetchBeers(pageStart: Int, perPage: Int, direction: SwipyRefreshLayoutDirection): Disposable
                 = repository
                 .fetchBeers(pageStart, perPage)
-                .doOnSubscribe { isLoading.postValue(true) }
-                .doOnTerminate { isLoading.postValue(false) }
+                .doOnNext { isLoading.postValue(false) }
                 .flatMap { beers ->
                     Flowable.fromIterable(beers)
                             .doOnNext { beer -> beer.direction = direction }

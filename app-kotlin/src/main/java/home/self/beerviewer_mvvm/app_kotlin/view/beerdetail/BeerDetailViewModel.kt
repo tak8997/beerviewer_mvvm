@@ -56,6 +56,7 @@ internal interface BeerDetailViewModel {
                     .map { beer ->
                         beer.name + ",\n" + beer.brewersTips + ",\n" + beer.firstBrewed
                     }
+                    .doOnNext { isLoading.postValue(true) }
                     .subscribeBy {
                         beerInfo.onNext(it)
                     }
@@ -75,9 +76,8 @@ internal interface BeerDetailViewModel {
         private fun fetchBeer(beerId: Int): Disposable
                 = repository
                 .fetchBeer(beerId)
-                .doOnSubscribe { isLoading.postValue(true) }
-                .doOnTerminate { isLoading.postValue(false) }
                 .doOnError { message.postValue(it.message ?: "unexpected error") }
+                .doOnNext{ isLoading.postValue(false) }
                 .subscribeBy { beerItem ->
                     beer.onNext(beerItem)
                 }

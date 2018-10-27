@@ -6,7 +6,6 @@ import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Local
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Remote
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,13 +27,13 @@ internal class BeerRepository @Inject constructor(
             .fetchBeers(pageStart, perPage)
             .subscribeOn(scheduler.io())
             .observeOn(scheduler.ui())
-            .switchMap { it ->
-                if(it.isEmpty()) {
+            .switchMap { beers ->
+                if(beers.isEmpty()) {
                     Log.d(TAG, "from_remote")
                     return@switchMap fetchBeersFromRemote(pageStart, perPage).toFlowable()
                 }
 
-                return@switchMap Flowable.just(it)
+                return@switchMap Flowable.just(beers)
             }
 
     override fun fetchBeersFromRemote(pageStart: Int, perPage: Int): Single<List<BeerModel>>
@@ -42,39 +41,42 @@ internal class BeerRepository @Inject constructor(
             .fetchBeersFromRemote(pageStart, perPage)
             .subscribeOn(scheduler.io())
             .observeOn(scheduler.ui())
-            .doAfterSuccess {
-                Log.d(TAG, "it must be saved")
-                localRepository.saveBeers(it)
+            .doAfterSuccess { beers ->
+                saveBeers(beers)
             }
 
+    override fun fetchBeer(beerId: Int): Flowable<BeerModel>
+            = localRepository
+            .fetchBeer(beerId)
+            .subscribeOn(scheduler.io())
+            .observeOn(scheduler.ui())
+            .doOnSubscribe { beer ->
+                if(beer == null) {
+                    fetchBeerFromRemote(beerId)
+                } else {
+                    Flowable.just(beer)
+                }
+            }
 
-    override fun getIndex(): Observable<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun fetchBeerFromRemote(beerId: Int): Single<BeerModel>
+            = remoteRepository
+            .fetchBeerFromRemote(beerId)
+            .subscribeOn(scheduler.io())
+            .observeOn(scheduler.ui())
+            .doAfterSuccess { beer ->
+                saveBeer(beer)
+            }
 
-    override fun saveBeers(beers: List<BeerModel>) { }
+    override fun saveBeers(beers: List<BeerModel>) = localRepository.saveBeers(beers)
 
-    override fun getBeer(beerId: Int): Flowable<BeerModel> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun saveBeer(beer: BeerModel) = localRepository.saveBeer(beer)
 
-    override fun saveBeer(beer: BeerModel) {
+    override fun getIndex(): Single<Int> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 //    override fun saveBeer(beer: BeerModel) {
 //
-//    }
-//
-//    override fun getBeer(beerId: Int): Flowable<BeerModel> {
-//        return beerLocalRepositoryApi
-//                .getBeer(beerId)
-////                .doOnSubscribe { beerModel ->
-////                    if(beerModel == null)
-////                        getBeerFromRemote(beerId)
-////                    else
-////                        Flowable.just<Subscription>(beerModel)
-////                }
 //    }
 //
 //    private fun getBeerFromRemote(beerId: Int): Flowable<BeerModel> {

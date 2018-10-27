@@ -16,11 +16,7 @@ import home.self.beerviewer_mvvm.app_kotlin.Constants
 internal interface BeerDetailModule {
 
     @Module
-    class ProvideModule {
-
-        @Provides
-        fun provideBeerId(beerDetailActivity: BeerDetailActivity) : Int = beerDetailActivity.intent.getIntExtra(Constants.KEY_BEAR_ID, -1)
-    }
+    class ProvideModule
 
     @Binds
     @IntoMap

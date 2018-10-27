@@ -1,14 +1,15 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beerdetail
 
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations
 import home.self.beerviewer_mvvm.app_kotlin.BaseViewModel
+import home.self.beerviewer_mvvm.app_kotlin.Constants
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
-import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
-import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
 
 /**
@@ -17,33 +18,58 @@ import javax.inject.Inject
 
 internal interface BeerDetailViewModel {
 
+    interface Inputs {
+        fun fetchBeerInfo(): LiveData<String>
+    }
+
+    interface Outputs {
+        fun fetchBeer(): MutableLiveData<BeerModel>
+        fun message(): MutableLiveData<String>
+        fun isLoading(): MutableLiveData<Boolean>
+    }
+
     class ViewModel @Inject constructor(
-            @App val repository: BeerRepositoryApi,
-                 val schedulerProvider: BaseSchedulerProvider,
-                 val beerId : Int) : BaseViewModel() {
+            @App val repository: BeerRepositoryApi
 
-        val isLoading: BehaviorSubject<Boolean> = BehaviorSubject.create()
+    ) : BaseViewModel(), Inputs, Outputs {
 
-        val message: BehaviorSubject<String> = BehaviorSubject.create()
+        val inputs = this
+        private val beerInfo: LiveData<String>
 
-        val beer: BehaviorSubject<BeerModel> = BehaviorSubject.create()
+        val outputs = this
+        private val beer = MutableLiveData<BeerModel>()
+        private val isLoading = MutableLiveData<Boolean>()
+        private val message = MutableLiveData<String>()
 
-        val beerInfo: BehaviorSubject<String> = BehaviorSubject.create()
+        init {
+            intent().map { it.getIntExtra(Constants.KEY_BEAR_ID, -1) }
+                    .filter { beerId -> beerId != -1 }
+                    .subscribeBy { beerId ->
+                        fetchBeer(beerId)
+                    }
 
-        fun getBeer(): Disposable {
-            return if (beerId != -1) {
-                repository
-                        .getBeer(beerId)
-                        .doOnSubscribe { isLoading.onNext(true) }
-                        .doOnTerminate { isLoading.onNext(false) }
-                        .subscribeOn(schedulerProvider.io())
-                        .subscribe({ item ->
-                            beer.onNext(item)
-                        }) { message.onNext(it.message ?: "unexpected error") }
-            } else {
-                message.onNext("not found")
-                throw Throwable("not found")
+            beerInfo = Transformations.map(beer) { beer ->
+                beer.name + ",\n" + beer.brewersTips + ",\n" + beer.description
             }
         }
+
+        override fun fetchBeer(): MutableLiveData<BeerModel> = beer
+
+        override fun message(): MutableLiveData<String> = message
+
+        override fun isLoading(): MutableLiveData<Boolean> = isLoading
+
+        override fun fetchBeerInfo() = beerInfo
+
+        private fun fetchBeer(beerId: Int): Disposable
+                = repository
+                .fetchBeer(beerId)
+                .doOnSubscribe { isLoading.postValue(true) }
+                .doOnTerminate { isLoading.postValue(false) }
+                .doOnError { message.postValue(it.message ?: "unexpected error") }
+                .subscribeBy { beerItem ->
+                    beer.postValue(beerItem)
+                }
+
     }
 }

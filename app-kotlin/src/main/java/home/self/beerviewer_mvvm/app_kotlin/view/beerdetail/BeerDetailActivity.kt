@@ -9,19 +9,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
 import home.self.beerviewer_mvvm.app_kotlin.R
-import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
-import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
+import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
+import home.self.beerviewer_mvvm.app_kotlin.extensions.observe
 import kotlinx.android.synthetic.main.activity_beer_detail.*
-import org.jetbrains.anko.longToast
-import javax.inject.Inject
+import org.jetbrains.anko.toast
 
 
 internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>() {
 
     private var beerInfo: String? = null
-
-    val disposables = AutoClearedDisposable(this)
-    val viewDisposables = AutoClearedDisposable(this, false)
 
     override fun getLayoutRes(): Int = R.layout.activity_beer_detail
 
@@ -30,46 +26,55 @@ internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewDisposables.add(viewModel.beer
-                .observeOn(schedulerProvider.ui())
-                .subscribe { beer ->
-                    beerInfo = (beer.name + "\n" + beer.tagline + "\n" + beer.description + "\n"
-                            + beer.brewersTips + "\n" + beer.contributedBy + "\n" + beer.firstBrewed)
-
-                    Glide.with(this)
-                            .load(beer.imageUrl)
-                            .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                            .into(beer_img)
-                    beer_title.text = beer.name
-                    beer_tagline.text = beer.tagline
-                    beer_description.text = beer.description
-                    beer_brewers_tips.text = beer.brewersTips
-                    beer_contributed_by.text = beer.contributedBy
-                    beer_first_brewed.text = beer.firstBrewed
-                    app_bar_title.text = beer.name
-                })
-
-        viewDisposables.add(viewModel.message
-                .observeOn(schedulerProvider.ui())
-                .subscribe { msg -> longToast(msg) })
-
-        viewDisposables.add(viewModel.isLoading
-                .observeOn(schedulerProvider.ui())
-                .subscribe { isLoading -> })
-
-        viewDisposables.add(viewModel.beerInfo
-                .observeOn(schedulerProvider.ui())
-                .subscribe { beerInfo ->
-                    val intent = Intent()
-                    intent.action = Intent.ACTION_SEND
-                    intent.putExtra(Intent.EXTRA_TEXT, beerInfo)
-                    intent.type = "text/plain"
-                    startActivity(Intent.createChooser(intent, resources.getText(R.string.send_to)))
-                })
-
-        disposables.add(viewModel.getBeer())
+        subscribe()
 
         setSupportActionBar(app_bar)
+    }
+
+    private fun subscribe() {
+        observe(viewModel.outputs.fetchBeer(), ::handleFetchBeer)
+        observe(viewModel.outputs.fetchBeerInfo(), ::handleFetchBeerInfo)
+        observe(viewModel.outputs.message(), ::handleMessage)
+        observe(viewModel.outputs.isLoading(), ::handleIsLoading)
+    }
+
+    private fun handleFetchBeer(beer: BeerModel?) {
+        beer?.let { it ->
+            Glide.with(this)
+                    .load(it.imageUrl)
+                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(beer_img)
+            beer_title.text = it.name
+            beer_tagline.text = it.tagline
+            beer_description.text = it.description
+            beer_brewers_tips.text = it.brewersTips
+            beer_contributed_by.text = it.contributedBy
+            beer_first_brewed.text = it.firstBrewed
+            app_bar_title.text = it.name
+        }
+    }
+
+    private fun handleMessage(message: String) {
+        toast(message)
+    }
+
+    private fun handleIsLoading(isLoading: Boolean) {
+        if(isLoading) {
+            showLoadingDialog()
+        } else {
+            hideLoadingDialog()
+        }
+    }
+
+    private fun handleFetchBeerInfo(beerInfo: String) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+
+            putExtra(Intent.EXTRA_TEXT, beerInfo)
+        }
+
+        startActivity(Intent.createChooser(intent, resources.getText(R.string.send_to)))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -80,7 +85,7 @@ internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.share -> {
-                beerInfo?.let { viewModel.beerInfo.onNext(it) }
+                beerInfo?.let { viewModel.inputs.fetchBeerInfo() }
                 return true
             }
         }

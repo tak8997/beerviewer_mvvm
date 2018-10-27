@@ -7,6 +7,7 @@ import home.self.beerviewer_mvvm.app_kotlin.Parameter
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
@@ -47,9 +48,15 @@ internal interface BeerDetailViewModel {
 
         init {
             intent().map { it.getIntExtra(Constants.KEY_BEAR_ID, -1) }
+                    .doOnNext{ isLoading.postValue(true) }
                     .filter { beerId -> beerId != -1 }
-                    .subscribeBy { beerId ->
-                        fetchBeer(beerId)
+                    .flatMapMaybe { beerId ->
+                        repository.fetchBeer(beerId).firstElement()
+                    }
+                    .doOnError { message.postValue(it.message ?: "unexpected error") }
+                    .doOnNext{ isLoading.postValue(false) }
+                    .subscribeBy { beerItem ->
+                        beer.onNext(beerItem)
                     }
 
             beer.compose<BeerModel> { clickBeerInfo.withLatestFrom(it, BiFunction { _, t2 -> t2 }) }
@@ -72,15 +79,6 @@ internal interface BeerDetailViewModel {
         override fun message(): MutableLiveData<String> = message
 
         override fun isLoading(): MutableLiveData<Boolean> = isLoading
-
-        private fun fetchBeer(beerId: Int): Disposable
-                = repository
-                .fetchBeer(beerId)
-                .doOnError { message.postValue(it.message ?: "unexpected error") }
-                .doOnNext{ isLoading.postValue(false) }
-                .subscribeBy { beerItem ->
-                    beer.onNext(beerItem)
-                }
 
     }
 }

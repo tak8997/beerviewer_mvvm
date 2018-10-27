@@ -71,7 +71,6 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
         }
 
         refresh_layout.setOnRefreshListener(this)
-        refresh_layout.setColorSchemeColors(Color.YELLOW, Color.RED, Color.GREEN)
     }
 
     override fun onItemClick(beer: BeerModel) {
@@ -80,7 +79,7 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
 
     override fun onRefresh(direction: SwipyRefreshLayoutDirection) {
         handler.postDelayed({
-            viewModel.outpus.fetchBeers(pageStart++, perPage, direction)
+            viewModel.intpus.fetchBeers(pageStart++, perPage, direction)
 
             refresh_layout.isRefreshing = false
         }, Constants.REFRESH_DELAY)

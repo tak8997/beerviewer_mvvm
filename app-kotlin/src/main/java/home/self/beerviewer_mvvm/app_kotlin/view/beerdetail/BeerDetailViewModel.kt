@@ -1,15 +1,17 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beerdetail
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import home.self.beerviewer_mvvm.app_kotlin.BaseViewModel
 import home.self.beerviewer_mvvm.app_kotlin.Constants
+import home.self.beerviewer_mvvm.app_kotlin.Parameter
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 /**
@@ -19,11 +21,12 @@ import javax.inject.Inject
 internal interface BeerDetailViewModel {
 
     interface Inputs {
-        fun fetchBeerInfo(): LiveData<String>
+        fun clickBeerInfo(click: Parameter)
     }
 
     interface Outputs {
-        fun fetchBeer(): MutableLiveData<BeerModel>
+        fun fetchBeer(): Observable<BeerModel>
+        fun fetchBeerInfo(): Observable<String>
         fun message(): MutableLiveData<String>
         fun isLoading(): MutableLiveData<Boolean>
     }
@@ -34,10 +37,11 @@ internal interface BeerDetailViewModel {
     ) : BaseViewModel(), Inputs, Outputs {
 
         val inputs = this
-        private val beerInfo: LiveData<String>
+        private val clickBeerInfo = PublishSubject.create<Parameter>()
 
         val outputs = this
-        private val beer = MutableLiveData<BeerModel>()
+        private val beer = PublishSubject.create<BeerModel>()
+        private val beerInfo = PublishSubject.create<String>()
         private val isLoading = MutableLiveData<Boolean>()
         private val message = MutableLiveData<String>()
 
@@ -48,18 +52,25 @@ internal interface BeerDetailViewModel {
                         fetchBeer(beerId)
                     }
 
-            beerInfo = Transformations.map(beer) { beer ->
-                beer.name + ",\n" + beer.brewersTips + ",\n" + beer.description
-            }
+            beer.compose<BeerModel> { clickBeerInfo.withLatestFrom(it, BiFunction { _, t2 -> t2 }) }
+                    .map { beer ->
+                        beer.name + ",\n" + beer.brewersTips + ",\n" + beer.firstBrewed
+                    }
+                    .subscribeBy {
+                        beerInfo.onNext(it)
+                    }
         }
 
-        override fun fetchBeer(): MutableLiveData<BeerModel> = beer
+        override fun clickBeerInfo(click: Parameter) = clickBeerInfo.onNext(click)
+
+
+        override fun fetchBeer(): Observable<BeerModel> = beer
+
+        override fun fetchBeerInfo(): Observable<String> = beerInfo
 
         override fun message(): MutableLiveData<String> = message
 
         override fun isLoading(): MutableLiveData<Boolean> = isLoading
-
-        override fun fetchBeerInfo() = beerInfo
 
         private fun fetchBeer(beerId: Int): Disposable
                 = repository
@@ -68,7 +79,7 @@ internal interface BeerDetailViewModel {
                 .doOnTerminate { isLoading.postValue(false) }
                 .doOnError { message.postValue(it.message ?: "unexpected error") }
                 .subscribeBy { beerItem ->
-                    beer.postValue(beerItem)
+                    beer.onNext(beerItem)
                 }
 
     }

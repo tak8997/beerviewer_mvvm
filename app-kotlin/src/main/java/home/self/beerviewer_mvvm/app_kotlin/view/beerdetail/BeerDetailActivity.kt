@@ -8,16 +8,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
+import home.self.beerviewer_mvvm.app_kotlin.Parameter
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.extensions.observe
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_beer_detail.*
 import org.jetbrains.anko.toast
 
 
 internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>() {
-
-    private var beerInfo: String? = null
 
     override fun getLayoutRes(): Int = R.layout.activity_beer_detail
 
@@ -32,25 +32,41 @@ internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>(
     }
 
     private fun subscribe() {
-        observe(viewModel.outputs.fetchBeer(), ::handleFetchBeer)
-        observe(viewModel.outputs.fetchBeerInfo(), ::handleFetchBeerInfo)
+        handleFetchBeer()
+        handleFetchBeerInfo()
+
         observe(viewModel.outputs.message(), ::handleMessage)
         observe(viewModel.outputs.isLoading(), ::handleIsLoading)
     }
 
-    private fun handleFetchBeer(beer: BeerModel?) {
-        beer?.let { it ->
-            Glide.with(this)
-                    .load(it.imageUrl)
-                    .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .into(beer_img)
-            beer_title.text = it.name
-            beer_tagline.text = it.tagline
-            beer_description.text = it.description
-            beer_brewers_tips.text = it.brewersTips
-            beer_contributed_by.text = it.contributedBy
-            beer_first_brewed.text = it.firstBrewed
-            app_bar_title.text = it.name
+    private fun handleFetchBeer() {
+        viewModel.outputs.fetchBeer().subscribeBy { beer ->
+            beer?.let { it ->
+                Glide.with(this)
+                        .load(it.imageUrl)
+                        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .into(beer_img)
+                beer_title.text = it.name
+                beer_tagline.text = it.tagline
+                beer_description.text = it.description
+                beer_brewers_tips.text = it.brewersTips
+                beer_contributed_by.text = it.contributedBy
+                beer_first_brewed.text = it.firstBrewed
+                app_bar_title.text = it.name
+            }
+        }
+    }
+
+    private fun handleFetchBeerInfo() {
+        viewModel.outputs.fetchBeerInfo().subscribeBy { beerInfo ->
+            val intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+
+                putExtra(Intent.EXTRA_TEXT, beerInfo)
+            }
+
+            startActivity(Intent.createChooser(intent, resources.getText(R.string.send_to)))
         }
     }
 
@@ -66,17 +82,6 @@ internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>(
         }
     }
 
-    private fun handleFetchBeerInfo(beerInfo: String) {
-        val intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            type = "text/plain"
-
-            putExtra(Intent.EXTRA_TEXT, beerInfo)
-        }
-
-        startActivity(Intent.createChooser(intent, resources.getText(R.string.send_to)))
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -85,7 +90,7 @@ internal class BeerDetailActivity : BaseActivity<BeerDetailViewModel.ViewModel>(
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.share -> {
-                beerInfo?.let { viewModel.inputs.fetchBeerInfo() }
+                viewModel.inputs.clickBeerInfo(Parameter.CLICK)
                 return true
             }
         }

@@ -1,11 +1,9 @@
 package home.self.beerviewer_mvvm.app_kotlin.extensions
 
-import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.SchedulerProvider
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.lang.IllegalArgumentException
 
 fun runOnIoThread(schedulerIO : Scheduler, func : () -> Unit) : Disposable {
     if (Schedulers.io() == schedulerIO)
@@ -14,9 +12,16 @@ fun runOnIoThread(schedulerIO : Scheduler, func : () -> Unit) : Disposable {
         throw IllegalArgumentException("must be a IO scheduler")
 }
 
-fun <T> applyObservableAsync(): ObservableTransformer<T, T> {
-    return ObservableTransformer { observable ->
-        observable.subscribeOn(Schedulers.io())
+fun <T> applyFlowableAsysnc(): FlowableTransformer<T, T> {
+    return FlowableTransformer { flowable ->
+        flowable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+}
+
+fun <T> applySingleAsysnc(): SingleTransformer<T, T> {
+    return SingleTransformer { flowable ->
+        flowable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 }

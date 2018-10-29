@@ -2,7 +2,6 @@ package home.self.beerviewer_mvvm.app_kotlin.di
 
 import android.app.Application
 import android.arch.lifecycle.ViewModelProvider
-import android.content.Context
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -15,6 +14,8 @@ import home.self.beerviewer_mvvm.app_kotlin.data.source.remote.BeerRemoteDataSou
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Local
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.Remote
+import home.self.beerviewer_mvvm.app_kotlin.network.appchannel.AppChannel
+import home.self.beerviewer_mvvm.app_kotlin.network.appchannel.AppChannelApi
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.SchedulerProvider
 import javax.inject.Singleton
@@ -48,6 +49,10 @@ internal interface ApplicationModule {
     @Local
     @Binds
     fun bindsBeerLocalDataSource(beerLocalRepository: BeerLocalDataSource): BeerRepositoryApi
+
+    @Binds
+    @Singleton
+    fun bindsAppChannel(appChannel: AppChannel): AppChannelApi
 
     @Binds
     fun bindsViewModelFactory(viewModelFactory: BaseViewModelFactory): ViewModelProvider.Factory

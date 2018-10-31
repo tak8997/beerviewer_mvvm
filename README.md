@@ -14,4 +14,4 @@ android kotlin toyproject / mvvm, retrofit2, rxjava2, rxkotlin2, dagger2, aac, r
 * 모델쪽은 repository pattern을 적용하였습니다.
 
 ## 피드백
-* 이슈에 피드백을 
+* 이슈에 피드백을 올려주세요.

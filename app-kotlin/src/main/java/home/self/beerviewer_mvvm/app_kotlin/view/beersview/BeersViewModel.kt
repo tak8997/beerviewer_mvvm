@@ -1,6 +1,6 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beersview
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import home.self.beerviewer_mvvm.app_kotlin.BaseViewModel
 import home.self.beerviewer_mvvm.app_kotlin.Constants
@@ -8,11 +8,11 @@ import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
 import io.reactivex.Flowable
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 internal interface BeersViewModel {
@@ -22,9 +22,9 @@ internal interface BeersViewModel {
     }
 
     interface Outputs {
-        fun fetchBeers(): MutableLiveData<List<BeerModel>>
-        fun fetchIndex(): MutableLiveData<Int>
-        fun isLoading(): MutableLiveData<Boolean>
+        fun fetchBeers(): Observable<List<BeerModel>>
+        fun fetchIndex(): Observable<Int>
+        fun isLoading(): Observable<Boolean>
     }
 
     class ViewModel @Inject constructor(
@@ -35,13 +35,13 @@ internal interface BeersViewModel {
         val intpus = this
         val outpus = this
 
-        private val beers = MutableLiveData<List<BeerModel>>()
-        private val isLoading = MutableLiveData<Boolean>()
-        private val index = MutableLiveData<Int>()
+        private val beers = BehaviorSubject.create<List<BeerModel>>()
+        private val isLoading = PublishSubject.create<Boolean>()
+        private val index = PublishSubject.create<Int>()
 
         init {
             intent().map { it.getSerializableExtra(Constants.EXTRA_DEFAULT_PAGE) as Pair<Int, Int> }
-                    .doOnNext { isLoading.postValue(true) }
+                    .doOnNext { isLoading.onNext(true) }
                     .subscribeBy { it ->
                         fetchBeers(it.first, it.second, SwipyRefreshLayoutDirection.TOP)
                     }
@@ -52,7 +52,7 @@ internal interface BeersViewModel {
         override fun fetchBeers(pageStart: Int, perPage: Int, direction: SwipyRefreshLayoutDirection): Disposable
                 = repository
                 .fetchBeers(pageStart, perPage)
-                .doOnNext { isLoading.postValue(false) }
+                .doOnNext { isLoading.onNext(false) }
                 .flatMap { beers ->
                     Flowable.fromIterable(beers)
                             .doOnNext { beer -> beer.direction = direction }
@@ -60,20 +60,20 @@ internal interface BeersViewModel {
                             .toFlowable()
                 }
                 .subscribeBy { beerList ->
-                    beers.postValue(beerList)
+                    beers.onNext(beerList)
                 }
 
-        override fun fetchBeers(): MutableLiveData<List<BeerModel>> = beers
+        override fun fetchBeers(): Observable<List<BeerModel>> = beers
 
-        override fun fetchIndex(): MutableLiveData<Int> = index
+        override fun fetchIndex(): Observable<Int> = index
 
-        override fun isLoading(): MutableLiveData<Boolean> = isLoading
+        override fun isLoading(): Observable<Boolean> = isLoading
 
         private fun subscribeIndex()
                 = repository
                 .getIndex()
                 .subscribe { it ->
-                    index.postValue(it)
+                    index.onNext(it)
                 }
     }
 

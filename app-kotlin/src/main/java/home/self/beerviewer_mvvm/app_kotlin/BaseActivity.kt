@@ -1,16 +1,16 @@
 package home.self.beerviewer_mvvm.app_kotlin
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AppCompatActivity
 import dagger.android.AndroidInjection
+import home.self.beerviewer_mvvm.app_kotlin.extensions.bind
 import home.self.beerviewer_mvvm.app_kotlin.extensions.showDialogFragment
-import home.self.beerviewer_mvvm.app_kotlin.rx.lifecycle.AutoClearedDisposable
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
+import io.reactivex.Observable
 import javax.inject.Inject
 
 internal abstract class BaseActivity<VM> : AppCompatActivity() where VM : BaseViewModel {
@@ -40,6 +40,11 @@ internal abstract class BaseActivity<VM> : AppCompatActivity() where VM : BaseVi
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(getViewModel())
         viewModel.intent(intent)
+
+        lifecycle.addObserver(object : LifecycleObserver {
+            @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+            fun onCreate() { }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -63,5 +68,7 @@ internal abstract class BaseActivity<VM> : AppCompatActivity() where VM : BaseVi
             null
         }
     }
+
+    fun <T> Observable<T>.observe(observer: (T) -> Unit) = bind(this@BaseActivity, observer)
 
 }

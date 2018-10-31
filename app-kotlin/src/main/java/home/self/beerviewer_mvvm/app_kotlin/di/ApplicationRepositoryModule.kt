@@ -2,20 +2,18 @@ package home.self.beerviewer_mvvm.app_kotlin.di
 
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import home.self.beerviewer_mvvm.app_kotlin.Constants
 import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerDao
 import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerDatabase
 import home.self.beerviewer_mvvm.app_kotlin.network.BeerApiService
-import home.self.beerviewer_mvvm.app_kotlin.network.calladapter.RetryingRxJava2CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.CallAdapter
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -44,14 +42,14 @@ internal interface ApplicationRepositoryModule {
         @Singleton
         @Provides
         fun retrofit(
-                okHttpClient: OkHttpClient,
-                retryRxJava2CallAdapterFactory: CallAdapter.Factory
+                okHttpClient: OkHttpClient
+//                retryRxJava2CallAdapterFactory: CallAdapter.Factory
 
         ): Retrofit = Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(retryRxJava2CallAdapterFactory)
-//                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addCallAdapterFactory(retryRxJava2CallAdapterFactory)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build()
 
@@ -82,7 +80,7 @@ internal interface ApplicationRepositoryModule {
 
     }
 
-    @Binds
-    @Singleton
-    fun bindsRetryingRxJava2CallAdapterFactory(retryRxJava2CallAdapterFactory: RetryingRxJava2CallAdapterFactory): CallAdapter.Factory
+//    @Binds
+//    @Singleton
+//    fun bindsRetryingRxJava2CallAdapterFactory(retryRxJava2CallAdapterFactory: RetryingRxJava2CallAdapterFactory): CallAdapter.Factory
 }

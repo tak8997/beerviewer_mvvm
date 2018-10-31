@@ -1,17 +1,15 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beersview
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
 import home.self.beerviewer_mvvm.app_kotlin.Constants
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
-import home.self.beerviewer_mvvm.app_kotlin.extensions.observe
 import home.self.beerviewer_mvvm.app_kotlin.view.beerdetail.BeerDetailActivity
 import kotlinx.android.synthetic.main.activity_beers_view.*
 import org.jetbrains.anko.startActivity
@@ -39,27 +37,21 @@ internal class BeersViewActivity : BaseActivity<BeersViewModel.ViewModel>(), Swi
     }
 
     private fun subscribe() {
-        observe(viewModel.outpus.isLoading(), ::handleIsLoading)
-        observe(viewModel.outpus.fetchBeers(), ::handleFetchBeers)
-        observe(viewModel.outpus.fetchIndex(), ::handleIndex)
-    }
-
-    private fun handleFetchBeers(beers: List<BeerModel>?) {
-        beers?.let {
-            beersAdapter.addItems(it)
+        viewModel.outpus.fetchBeers().observe { beers ->
+            beersAdapter.addItems(beers)
         }
-    }
 
-    private fun handleIsLoading(isLoading: Boolean) {
-        if(isLoading) {
-            showLoadingDialog()
-        } else {
-            hideLoadingDialog()
+        viewModel.outpus.fetchIndex().observe { index ->
+            pageStart = index
         }
-    }
 
-    private fun handleIndex(index: Int) {
-        pageStart = index
+        viewModel.outpus.isLoading().observe { isLoading ->
+            if(isLoading) {
+                showLoadingDialog()
+            } else {
+                hideLoadingDialog()
+            }
+        }
     }
 
     private fun initializeViews() {

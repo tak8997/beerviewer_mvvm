@@ -1,6 +1,6 @@
 package home.self.beerviewer_mvvm.view.beersview;
 
-import android.databinding.BaseObservable;
+import androidx.databinding.BaseObservable;
 
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 

@@ -1,8 +1,8 @@
 package home.self.beerviewer_mvvm.app_kotlin.data.source.local
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 
 import home.self.beerviewer_mvvm.app_kotlin.BeerViewerApplication
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel

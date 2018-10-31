@@ -1,17 +1,16 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beerdetail
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import home.self.beerviewer_mvvm.app_kotlin.BaseViewModel
 import home.self.beerviewer_mvvm.app_kotlin.Constants
 import home.self.beerviewer_mvvm.app_kotlin.Parameter
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
@@ -28,8 +27,8 @@ internal interface BeerDetailViewModel {
     interface Outputs {
         fun fetchBeer(): Observable<BeerModel>
         fun fetchBeerInfo(): Observable<String>
-        fun message(): MutableLiveData<String>
-        fun isLoading(): MutableLiveData<Boolean>
+        fun message(): Observable<String>
+        fun isLoading(): Observable<Boolean>
     }
 
     class ViewModel @Inject constructor(
@@ -41,20 +40,20 @@ internal interface BeerDetailViewModel {
         private val clickBeerInfo = PublishSubject.create<Parameter>()
 
         val outputs = this
-        private val beer = PublishSubject.create<BeerModel>()
+        private val beer = BehaviorSubject.create<BeerModel>()
         private val beerInfo = PublishSubject.create<String>()
-        private val isLoading = MutableLiveData<Boolean>()
-        private val message = MutableLiveData<String>()
+        private val isLoading = PublishSubject.create<Boolean>()
+        private val message = PublishSubject.create<String>()
 
         init {
             intent().map { it.getIntExtra(Constants.KEY_BEAR_ID, -1) }
-                    .doOnNext{ isLoading.postValue(true) }
+                    .doOnNext{ isLoading.onNext(true) }
                     .filter { beerId -> beerId != -1 }
                     .flatMapMaybe { beerId ->
                         repository.fetchBeer(beerId).firstElement()
                     }
-                    .doOnError { message.postValue(it.message ?: "unexpected error") }
-                    .doOnNext{ isLoading.postValue(false) }
+                    .doOnError { message.onNext(it.message ?: "unexpected error") }
+                    .doOnNext{ isLoading.onNext(false) }
                     .subscribeBy { beerItem ->
                         beer.onNext(beerItem)
                     }
@@ -63,7 +62,7 @@ internal interface BeerDetailViewModel {
                     .map { beer ->
                         beer.name + ",\n" + beer.brewersTips + ",\n" + beer.firstBrewed
                     }
-                    .doOnNext { isLoading.postValue(true) }
+                    .doOnNext { isLoading.onNext(true) }
                     .subscribeBy {
                         beerInfo.onNext(it)
                     }
@@ -76,9 +75,9 @@ internal interface BeerDetailViewModel {
 
         override fun fetchBeerInfo(): Observable<String> = beerInfo
 
-        override fun message(): MutableLiveData<String> = message
+        override fun message(): Observable<String> = message
 
-        override fun isLoading(): MutableLiveData<Boolean> = isLoading
+        override fun isLoading(): Observable<Boolean> = isLoading
 
     }
 }

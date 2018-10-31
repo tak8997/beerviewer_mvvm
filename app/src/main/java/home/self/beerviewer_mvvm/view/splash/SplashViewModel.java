@@ -1,21 +1,14 @@
 package home.self.beerviewer_mvvm.view.splash;
 
-import android.databinding.BaseObservable;
-import android.util.Log;
-
-import java.util.List;
+import androidx.databinding.BaseObservable;
 
 import javax.inject.Inject;
 
 import home.self.beerviewer_mvvm.BeerViewerApplication;
 import home.self.beerviewer_mvvm.R;
-import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerRepository;
 import home.self.beerviewer_mvvm.rx.schedulers.BaseSchedulerProvider;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class SplashViewModel extends BaseObservable {
 

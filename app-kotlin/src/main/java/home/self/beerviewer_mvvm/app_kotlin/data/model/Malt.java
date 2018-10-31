@@ -1,7 +1,7 @@
 package home.self.beerviewer_mvvm.app_kotlin.data.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Embedded;
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 
 import com.google.gson.annotations.SerializedName;
 

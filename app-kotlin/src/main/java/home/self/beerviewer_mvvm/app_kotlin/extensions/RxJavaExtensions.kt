@@ -1,5 +1,8 @@
 package home.self.beerviewer_mvvm.app_kotlin.extensions
 
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.LiveDataReactiveStreams
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -25,3 +28,9 @@ fun <T> applySingleAsysnc(): SingleTransformer<T, T> {
                 .observeOn(AndroidSchedulers.mainThread())
     }
 }
+
+fun <T> Observable<T>.toLiveData() = LiveDataReactiveStreams.fromPublisher(this.toFlowable(io.reactivex.BackpressureStrategy.DROP))
+
+fun <T> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) = observe({ lifecycleOwner.lifecycle }, observer)
+
+fun <T> Observable<T>.bind(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) = toLiveData().observe(lifecycleOwner, observer)

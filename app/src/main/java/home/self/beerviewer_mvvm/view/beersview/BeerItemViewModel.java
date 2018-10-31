@@ -1,9 +1,9 @@
 package home.self.beerviewer_mvvm.view.beersview;
 
-import android.databinding.BaseObservable;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.databinding.ObservableList;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ObservableList;
 import android.view.View;
 
 import home.self.beerviewer_mvvm.data.model.BeerModel;

@@ -1,8 +1,8 @@
 package home.self.beerviewer_mvvm.app_kotlin.extensions
 
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 
 
 fun FragmentActivity.showDialogFragment(fragment: Fragment, tag: String = "", commitAllowStateLoss: Boolean = true) {

@@ -1,7 +1,6 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.splash
 
-import android.arch.lifecycle.ViewModel
-import com.mashup.dutchmarket.di.ActivityScope
+import androidx.lifecycle.ViewModel
 import com.mashup.dutchmarket.di.key.ViewModelKey
 import dagger.Binds
 import dagger.Module

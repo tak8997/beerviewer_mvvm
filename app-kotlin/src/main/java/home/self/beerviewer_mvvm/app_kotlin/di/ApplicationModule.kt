@@ -1,7 +1,7 @@
 package home.self.beerviewer_mvvm.app_kotlin.di
 
 import android.app.Application
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

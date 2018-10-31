@@ -1,13 +1,11 @@
 package home.self.beerviewer_mvvm.view.beerdetail;
 
-import android.databinding.BaseObservable;
-import android.databinding.ObservableField;
-import android.support.annotation.Nullable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.ObservableField;
+import androidx.annotation.Nullable;
 
 import javax.inject.Inject;
 
-import home.self.beerviewer_mvvm.BeerViewerApplication;
-import home.self.beerviewer_mvvm.R;
 import home.self.beerviewer_mvvm.data.model.BeerModel;
 import home.self.beerviewer_mvvm.data.source.BeerDataSource;
 import home.self.beerviewer_mvvm.rx.schedulers.BaseSchedulerProvider;

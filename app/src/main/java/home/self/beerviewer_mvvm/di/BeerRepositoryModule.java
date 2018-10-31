@@ -2,7 +2,7 @@ package home.self.beerviewer_mvvm.di;
 
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 
 import java.util.concurrent.TimeUnit;
 

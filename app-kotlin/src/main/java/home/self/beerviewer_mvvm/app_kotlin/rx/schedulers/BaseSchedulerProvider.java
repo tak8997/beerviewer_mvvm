@@ -1,6 +1,6 @@
 package home.self.beerviewer_mvvm.app_kotlin.rx.schedulers;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.reactivex.Scheduler;
 

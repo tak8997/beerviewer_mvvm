@@ -1,9 +1,9 @@
 package home.self.beerviewer_mvvm.app_kotlin
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import android.content.Intent
-import android.support.annotation.CallSuper
-import android.support.annotation.CheckResult
+import androidx.annotation.CallSuper
+import androidx.annotation.CheckResult
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable

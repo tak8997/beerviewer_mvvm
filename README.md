@@ -1,5 +1,4 @@
 # beerviewer_mvvm
-android kotlin toyproject / mvvm, retrofit2, rxjava2, rxkotlin2, dagger2, aac, repository pattern / PR 환영
 
 #### 맥주 소개 앱
 간단한 맥주 소개 앱 입니다.

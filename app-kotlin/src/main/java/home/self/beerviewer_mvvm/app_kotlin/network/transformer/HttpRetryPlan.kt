@@ -39,7 +39,7 @@ internal class HttpRetryPlan @Inject constructor(
         } else {
             when(cause) {
                 is HttpException -> appChannel.accept(RemoteCallState.Failure.ByServer(httpUnsuccessfulCause))
-                is IOException -> appChannel.accept(RemoteCallState.Failure.ByNetwork(httpUnsuccessfulCause))
+                is IOException   -> appChannel.accept(RemoteCallState.Failure.ByNetwork(httpUnsuccessfulCause))
                 else             -> appChannel.accept(RemoteCallState.Failure.ByNonTransient(httpUnsuccessfulCause))
             }
 

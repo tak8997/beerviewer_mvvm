@@ -1,9 +1,8 @@
 package home.self.beerviewer_mvvm.app_kotlin.view.beersview
 
-import androidx.lifecycle.MutableLiveData
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
-import home.self.beerviewer_mvvm.app_kotlin.BaseViewModel
-import home.self.beerviewer_mvvm.app_kotlin.Constants
+import home.self.beerviewer_mvvm.app_kotlin.base.BaseViewModel
+import home.self.beerviewer_mvvm.app_kotlin.base.Constants
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App

@@ -2,8 +2,8 @@ package home.self.beerviewer_mvvm.app_kotlin.view.splash
 
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
-import home.self.beerviewer_mvvm.app_kotlin.Constants
+import home.self.beerviewer_mvvm.app_kotlin.base.BaseActivity
+import home.self.beerviewer_mvvm.app_kotlin.base.Constants
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.view.beersview.BeersViewActivity
 import kotlinx.android.synthetic.main.activity_splash.*

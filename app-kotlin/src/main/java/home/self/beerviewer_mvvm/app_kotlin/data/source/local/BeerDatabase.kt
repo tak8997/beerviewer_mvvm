@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-import home.self.beerviewer_mvvm.app_kotlin.BeerViewerApplication
+import home.self.beerviewer_mvvm.app_kotlin.base.BeerViewerApplication
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.data.model.WishModel
 

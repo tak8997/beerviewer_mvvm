@@ -1,4 +1,4 @@
-package home.self.beerviewer_mvvm.app_kotlin
+package home.self.beerviewer_mvvm.app_kotlin.base
 
 enum class Parameter {
     CLICK, NULL, SUCCESS, EVENT

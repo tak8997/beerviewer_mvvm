@@ -7,8 +7,8 @@ import android.view.MenuItem
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
-import home.self.beerviewer_mvvm.app_kotlin.Parameter
+import home.self.beerviewer_mvvm.app_kotlin.base.BaseActivity
+import home.self.beerviewer_mvvm.app_kotlin.base.Parameter
 import home.self.beerviewer_mvvm.app_kotlin.R
 import kotlinx.android.synthetic.main.activity_beer_detail.*
 import org.jetbrains.anko.toast

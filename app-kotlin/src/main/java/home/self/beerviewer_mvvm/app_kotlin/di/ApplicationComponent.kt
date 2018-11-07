@@ -5,7 +5,7 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import home.self.beerviewer_mvvm.app_kotlin.BeerViewerApplication
+import home.self.beerviewer_mvvm.app_kotlin.base.BeerViewerApplication
 import javax.inject.Singleton
 
 /**
@@ -26,8 +26,8 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         ActivityBindingModule::class,
         ApplicationModule::class,
-        ApplicationRepositoryModule::class
-)
+        ApplicationRepositoryModule::class,
+        HttpInteractorModule::class)
 )
 internal interface ApplicationComponent : AndroidInjector<BeerViewerApplication> {
 

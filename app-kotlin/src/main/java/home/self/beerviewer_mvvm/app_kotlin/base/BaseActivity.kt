@@ -1,4 +1,4 @@
-package home.self.beerviewer_mvvm.app_kotlin
+package home.self.beerviewer_mvvm.app_kotlin.base
 
 import androidx.lifecycle.*
 import android.content.Intent

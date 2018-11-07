@@ -1,4 +1,4 @@
-package home.self.beerviewer_mvvm.app_kotlin
+package home.self.beerviewer_mvvm.app_kotlin.base
 
 import android.app.Activity
 import android.app.Application
@@ -19,6 +19,8 @@ internal class BeerViewerApplication : Application(), HasActivityInjector {
 
     @Inject lateinit var activityInjector: DispatchingAndroidInjector<Activity>
 
+    @Inject lateinit var httpInteractor: HttpInteractorApi
+
     override fun onCreate() {
         super.onCreate()
 
@@ -36,6 +38,8 @@ internal class BeerViewerApplication : Application(), HasActivityInjector {
                 .builder()
                 .create(this)
                 .inject(this)
+
+        httpInteractor.start()
     }
 
     private fun initializeStetho() {

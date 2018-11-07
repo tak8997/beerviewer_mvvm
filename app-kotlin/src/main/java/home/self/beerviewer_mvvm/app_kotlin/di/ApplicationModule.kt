@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import home.self.beerviewer_mvvm.app_kotlin.BaseViewModelFactory
-import home.self.beerviewer_mvvm.app_kotlin.BeerViewerApplication
+import home.self.beerviewer_mvvm.app_kotlin.base.BaseViewModelFactory
+import home.self.beerviewer_mvvm.app_kotlin.base.BeerViewerApplication
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepository
 import home.self.beerviewer_mvvm.app_kotlin.data.source.BeerRepositoryApi
 import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerLocalDataSource

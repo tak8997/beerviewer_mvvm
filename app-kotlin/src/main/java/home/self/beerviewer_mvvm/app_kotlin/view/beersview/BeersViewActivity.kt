@@ -6,8 +6,8 @@ import android.os.Looper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
-import home.self.beerviewer_mvvm.app_kotlin.BaseActivity
-import home.self.beerviewer_mvvm.app_kotlin.Constants
+import home.self.beerviewer_mvvm.app_kotlin.base.BaseActivity
+import home.self.beerviewer_mvvm.app_kotlin.base.Constants
 import home.self.beerviewer_mvvm.app_kotlin.R
 import home.self.beerviewer_mvvm.app_kotlin.data.model.BeerModel
 import home.self.beerviewer_mvvm.app_kotlin.view.beerdetail.BeerDetailActivity

@@ -6,7 +6,7 @@ import androidx.room.Room
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
-import home.self.beerviewer_mvvm.app_kotlin.Constants
+import home.self.beerviewer_mvvm.app_kotlin.base.Constants
 import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerDao
 import home.self.beerviewer_mvvm.app_kotlin.data.source.local.BeerDatabase
 import home.self.beerviewer_mvvm.app_kotlin.network.BeerApiService

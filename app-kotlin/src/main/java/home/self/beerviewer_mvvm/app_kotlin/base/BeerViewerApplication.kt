@@ -8,6 +8,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import home.self.beerviewer_mvvm.app_kotlin.di.DaggerApplicationComponent
+import home.self.beerviewer_mvvm.app_kotlin.network.HttpInteractorApi
 import javax.inject.Inject
 
 internal class BeerViewerApplication : Application(), HasActivityInjector {

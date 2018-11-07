@@ -1,6 +1,8 @@
-package home.self.beerviewer_mvvm.app_kotlin.base
+package home.self.beerviewer_mvvm.app_kotlin.network
 
+import home.self.beerviewer_mvvm.app_kotlin.data.model.AppLooknFeel
 import home.self.beerviewer_mvvm.app_kotlin.data.model.RemoteCallState
+import home.self.beerviewer_mvvm.app_kotlin.di.qualifier.App
 import home.self.beerviewer_mvvm.app_kotlin.network.appchannel.AppChannelApi
 import home.self.beerviewer_mvvm.app_kotlin.rx.schedulers.BaseSchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -27,7 +29,13 @@ internal class HttpInteractor @Inject constructor(
                                 onNext = {
                                     when(it) {
                                         is RemoteCallState.Executed.OfInitial -> {
-                                            appChannel.accept()
+                                            appChannel.accept(AppLooknFeel.Network.LoadingDialog.Show)
+                                        }
+
+                                        is RemoteCallState.Executed.OfRetry -> {
+                                            if(it.httpUnsuccessfulCause.retryCount == MAX_RETIRES) {
+//                                                appChannel.accept(AppLooknFeel.Network.)
+                                            }
                                         }
                                     }
                                 }
